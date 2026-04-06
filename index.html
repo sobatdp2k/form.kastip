@@ -604,7 +604,10 @@ div[style*="text-align: center; margin-top: 20px;"] {
 // ============================================================
 // 1. SISTEM LOGIN & SECURITY ENGINE (AUTO-SWITCHING)
 // ============================================================
-// Ganti baris ~260 dengan ini:
+if (window.location.hostname !== 'localhost' && window.location.protocol === 'http:') {
+    window.location.protocol = 'https:';
+}
+  
 const ALLOWED_HASHS = [
     "3fc108a958e986b72d2fb420e6f24ef3022ea155167bb3098f98018dc22baeb3", //
     "6cc637ed192a5b6d1948834a362244199c09930776b251219b16858e0a324317"  //
@@ -643,10 +646,12 @@ async function hashString(str) {
     if (window.crypto && window.crypto.subtle) {
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        // Menggunakan padStart untuk memastikan output selalu 2 digit per byte
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
-    // Fallback ini hanya akan aktif jika dibuka di browser purba (sebelum 2015)
+    
+    // Jika gagal masuk sini, berarti aplikasi dijalankan di HTTP, bukan HTTPS
+    console.error("🔒 CRITICAL: Web Crypto API tidak tersedia. Harap akses menggunakan HTTPS.");
+    alert("Koneksi tidak aman (HTTP). Fitur enkripsi password dimatikan browser. Silakan refresh halaman menggunakan HTTPS.");
     return btoa(str); 
 }
 
@@ -657,8 +662,9 @@ async function handleLogin(e) {
   
   const hashedInput = await hashString(p);
   
-  //
-  //
+  // INJEKSI DEBUGGER: Akan memunculkan pop-up yang memberitahu hash apa yang sebenarnya dihasilkan oleh GitHub Pages
+  alert("DIAGNOSTIK SISTEM:\nHash Input: " + hashedInput + "\nKriptografi Native Aktif: " + !!(window.crypto && window.crypto.subtle));
+  
   if (u === 'admin' && ALLOWED_HASHS.includes(hashedInput)) { 
       sessionStorage.setItem('isLoggedIn', 'true'); 
       unlockDashboard(); 
