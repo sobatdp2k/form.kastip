@@ -609,8 +609,9 @@ if (window.location.hostname !== 'localhost' && window.location.protocol === 'ht
 }
   
 const ALLOWED_HASHS = [
-    "3fc108a958e986b72d2fb420e6f24ef3022ea155167bb3098f98018dc22baeb3", //
-    "6cc637ed192a5b6d1948834a362244199c09930776b251219b16858e0a324317"  //
+    "3fc108a958e986b72d2fb420e6f24ef3022ea155167bb3098f98018dc22baeb3",
+    "6cc637ed192a5b6d1948834a362244199c09930776b251219b16858e0a324317",
+    "1562206543da764123c21bd524674f0a8aaf49c8a89744c97352fe677f7e4006" // Hash password yang baru dideteksi
 ];
 
 const STORAGE_KEY = 'DashboardKastip_Data_vFINAL'; 
@@ -661,9 +662,6 @@ async function handleLogin(e) {
   const p = el('password').value.trim();
   
   const hashedInput = await hashString(p);
-  
-  // INJEKSI DEBUGGER: Akan memunculkan pop-up yang memberitahu hash apa yang sebenarnya dihasilkan oleh GitHub Pages
-  alert("DIAGNOSTIK SISTEM:\nHash Input: " + hashedInput + "\nKriptografi Native Aktif: " + !!(window.crypto && window.crypto.subtle));
   
   if (u === 'admin' && ALLOWED_HASHS.includes(hashedInput)) { 
       sessionStorage.setItem('isLoggedIn', 'true'); 
