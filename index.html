@@ -216,6 +216,15 @@ div[style*="text-align: center; margin-top: 20px;"] {
     </div>
     
     <div style="display: flex; gap: 24px; align-items: center;">
+      <div id="globalStatsBar" style="display: flex; gap: 16px; background: var(--bg-card); padding: 8px 16px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: var(--shadow-card);">
+        <div style="text-align: left; border-right: 1px solid var(--border-light); padding-right: 16px;">
+          <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Saldo Seluruh Wilayah</span><br>
+          <strong id="head-global-saldo" style="font-size: 14px; color: var(--teal-val);">-</strong>
+        </div>
+        <div style="text-align: left; display: flex; align-items: center;">
+          <strong id="head-global-kastip" style="font-size: 13px; color: var(--blue-primary); font-weight: 800;">-</strong>
+        </div>
+      </div>
       <button class="btn btn-primary" style="padding: 14px 24px; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.3);" onclick="scrollToEdit()">✏️ Input Manual</button>
     </div>
   </header>
@@ -292,7 +301,7 @@ div[style*="text-align: center; margin-top: 20px;"] {
             </div>
         </div>
         
-        <div style="margin-top: auto; background: var(--blue-light); padding: 12px; border-radius: 8px; border: 1px solid var(--blue-primary);">
+        <div style="margin-top: 16px; background: var(--blue-light); padding: 12px; border-radius: 8px; border: 1px solid var(--blue-primary);">
             <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; text-transform: uppercase;">Peserta Aktif:</span><br>
             <strong id="kv-peserta" style="font-size: 13px; color: var(--blue-primary); line-height: 1.4;">-</strong>
             <div style="margin-top: 6px; font-size: 11px; color: var(--blue-primary); border-top: 1px solid var(--blue-primary); padding-top: 6px;">
@@ -319,6 +328,8 @@ div[style*="text-align: center; margin-top: 20px;"] {
                 <span id="badge-outflow" style="display:none;"></span>
             </div>
             
+
+
             <div style="margin-top: 16px;">
                 <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); font-weight:800; margin-bottom:6px;">
                     <span id="kv-pct-in-text">IN 0%</span><span id="kv-pct-out-text">OUT 0%</span>
@@ -329,16 +340,50 @@ div[style*="text-align: center; margin-top: 20px;"] {
                 </div>
             </div>
 
-            <div style="margin-top: 16px; padding: 10px 14px; background: var(--green-bg); border-radius: 8px; border: 1px solid var(--green-val);">
-                <span style="font-size: 10px; color: var(--green-val); font-weight: 800; letter-spacing: 0.5px;">RATA-RATA MUTASI</span><br>
-                <strong id="kv-avg-mutasi" style="font-size: 15px; color: var(--green-val); white-space: nowrap;">Rp 0</strong>
+
+            
+            <div id="box-inout-rincian" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px; display: none;">
+                <div style="flex: 1; padding: 10px 12px; background: var(--green-bg); border-radius: 8px; border: 1px solid var(--green-val);">
+                    <div style="font-size: 9px; color: var(--green-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 6px;">RINCIAN INFLOW</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--green-val); font-size: 11px;">
+                        <span style="color: var(--green-val);" id="lbl-inflow-m1">Jan:</span>
+                        <strong style="color: var(--green-val);" id="val-inflow-m1">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--green-val); font-size: 11px;">
+                        <span style="color: var(--green-val);" id="lbl-inflow-m2">Feb:</span>
+                        <strong style="color: var(--green-val);" id="val-inflow-m2">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; font-size: 11px;" id="wrap-inflow-m3">
+                        <span style="color: var(--green-val);" id="lbl-inflow-m3">Mar:</span>
+                        <strong style="color: var(--green-val);" id="val-inflow-m3">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; padding-bottom: 4px; display: none;" id="wrap-inflow-m4">
+                        <span style="color: var(--green-val);" id="lbl-inflow-m4">Triwulan 4:</span>
+                        <strong style="color: var(--green-val);" id="val-inflow-m4">-</strong>
+                    </div>
+                </div>
+                <div style="flex: 1; padding: 10px 12px; background: var(--red-bg); border-radius: 8px; border: 1px solid var(--red-val);">
+                    <div style="font-size: 9px; color: var(--red-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 6px;">RINCIAN OUTFLOW</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--red-val); font-size: 11px;">
+                        <span style="color: var(--red-val);" id="lbl-outflow-m1">Jan:</span>
+                        <strong style="color: var(--red-val);" id="val-outflow-m1">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--red-val); font-size: 11px;">
+                        <span style="color: var(--red-val);" id="lbl-outflow-m2">Feb:</span>
+                        <strong style="color: var(--red-val);" id="val-outflow-m2">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; font-size: 11px;" id="wrap-outflow-m3">
+                        <span style="color: var(--red-val);" id="lbl-outflow-m3">Mar:</span>
+                        <strong style="color: var(--red-val);" id="val-outflow-m3">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; padding-bottom: 4px; display: none;" id="wrap-outflow-m4">
+                        <span style="color: var(--red-val);" id="lbl-outflow-m4">Triwulan 4:</span>
+                        <strong style="color: var(--red-val);" id="val-outflow-m4">-</strong>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div style="margin-top: auto; background: var(--green-bg); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--green-val);">
-            <span style="font-size: 12px; font-weight: 800; color: var(--green-val);">(IN+OUT):</span>
-            <strong id="kv-tot-inout-kpi" style="font-size: 16px; color: var(--green-val); white-space: nowrap;">Rp 0</strong>
-        </div>
       </div>
 
       <div class="kpi-card" style="border-top: 5px solid var(--gold-val); padding: 24px;">
@@ -360,6 +405,17 @@ div[style*="text-align: center; margin-top: 20px;"] {
                 <div style="flex: 1; padding: 10px 12px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val);">
                     <span style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">RASIO NETFLOW</span><br>
                     <strong id="kv-ratio-netflow" style="font-size: 15px; color: var(--gold-val); white-space: nowrap;">0%</strong>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                <div style="flex: 1; padding: 10px 12px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val);">
+                    <span style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">RATA-RATA MUTASI</span><br>
+                    <strong id="kv-avg-mutasi" style="font-size: 14px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+                </div>
+                <div style="flex: 1; padding: 10px 12px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val);">
+                    <span style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">(IN+OUT)</span><br>
+                    <strong id="kv-tot-inout-kpi" style="font-size: 14px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
                 </div>
             </div>
         </div>
@@ -539,7 +595,8 @@ div[style*="text-align: center; margin-top: 20px;"] {
       <div class="card-box span-2 map-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
             <div class="card-title" style="margin-bottom: 0; border: none; padding: 0;">🗺️ Peta Wilayah & Sebaran Status Bank Peserta</div>
-            <div style="display: flex; gap: 10px; font-size: 11px; font-weight: 700; color: var(--text-muted);">
+            <div style="display: flex; gap: 10px; font-size: 11px; font-weight: 700; color: var(--text-muted); align-items: center;">
+               <button id="btnMapAll" onclick="toggleMapAll()" style="padding: 4px 10px; font-size: 10px; background: var(--bg-body); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 4px; cursor: pointer; font-weight: 700; transition: all 0.2s;">Petakan Semua</button>
                <div style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 12px; background: #15803d; border-radius: 50%;"></span> Inflow</div>
                <div style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 12px; background: #b91c1c; border-radius: 50%;"></span> Outflow</div>
                <div style="display: flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #38bdf8; border: 2px solid #0284c7; border-radius: 50%;"></span> Bank Peserta</div>
@@ -684,6 +741,12 @@ async function unlockDashboard() {
       currentKpw = state.kpw || ""; currentKt = state.kt || "";
   }
   changePeriode(); 
+  // Atasi Bug Grey Box Leaflet dengan memaksa Leaflet menghitung ulang ukuran kontainer setelah elemen mainApp tampil
+  setTimeout(() => {
+      if (typeof geoMap !== 'undefined' && geoMap) {
+          geoMap.invalidateSize();
+      }
+  }, 200);
 }
 
 // ============================================================
@@ -755,7 +818,7 @@ for(let i=1; i<=3; i++) {
     { id: `pct_pkse_harian_b${i}`, label: `% Rata-Rata Saldo PKSE/Rata-Rata Saldo Harian Bulan ${i}`, cat: `4. Saldo Bulan ${i}`, type: 'percent', computed: true },
     { id: `pct_harian_plafon_b${i}`, label: `% Rata-Rata Saldo Harian/Plafon Bulan ${i}`, cat: `4. Saldo Bulan ${i}`, type: 'percent', computed: true },
     { id: `utle_b${i}`, label: `Jumlah UTLE yang Disetor selama Bulan ${i}`, cat: `5. UTLE & Biaya Bulan ${i}`, type: 'currency' },
-    { id: `pct_utle_b${i}`, label: `Persentase Jumlah Setoran UTLE Bulan ${i} dari Jumlah Setoran`, cat: `5. UTLE & Biaya Bulan ${i}`, type: 'percent' },
+    { id: `pct_utle_b${i}`, label: `Persentase Jumlah Setoran UTLE Bulan ${i} dari Jumlah Setoran`, cat: `5. UTLE & Biaya Bulan ${i}`, type: 'percent', computed: true },
     { id: `pengeluaran_b${i}`, label: `Pengeluaran Kas Titipan Bulan ${i}`, cat: `5. UTLE & Biaya Bulan ${i}`, type: 'currency' },
     { id: `bops_b${i}`, label: `Bantuan Operasional yang Diberikan Bulan ${i}`, cat: `5. UTLE & Biaya Bulan ${i}`, type: 'currency' },
     { id: `b_utle_b${i}`, label: `Bantuan Biaya Pengolahan UTLE Bulan ${i}`, cat: `5. UTLE & Biaya Bulan ${i}`, type: 'currency' },
@@ -775,7 +838,7 @@ BASE_SCHEMA.push(
   { id: 'ambil_jml', label: 'Jumlah Pengambilan Kas Selama Triwulan', cat: '6. Agregat Triwulan', type: 'currency' },
   { id: 'ambil_frek', label: 'Frekuensi Pengambilan', cat: '6. Agregat Triwulan', type: 'number' },
   { id: 'utle_tw', label: 'Jumlah UTLE yang Disetor selama Triwulan', cat: '6. Agregat Triwulan', type: 'currency', computed: true },
-  { id: 'pct_utle_tw', label: 'Persentase Jumlah Setoran UTLE Triwulan dari Jumlah Setoran', cat: '6. Agregat Triwulan', type: 'percent' },
+  { id: 'pct_utle_tw', label: 'Persentase Jumlah Setoran UTLE Triwulan dari Jumlah Setoran', cat: '6. Agregat Triwulan', type: 'percent', computed: true },
   { id: 'lyn_penukaran', label: 'Layanan Penukaran', cat: '7. Layanan Penukaran', type: 'text' },
   { id: 'lyn_jadwal', label: 'Jadwal Layanan Penukaran', cat: '7. Layanan Penukaran', type: 'text' },
   { id: 'lyn_realisasi', label: 'Jumlah Realisasi Penukaran yang Dilakukan', cat: '7. Layanan Penukaran', type: 'number' },
@@ -822,6 +885,7 @@ function computeData(D) {
     D[`tot_inout_b${i}`] = inf + outf;
     D[`pct_pkse_harian_b${i}`] = D[`rata_harian_b${i}`] ? parseFloat(((D[`rata_pkse_b${i}`] / D[`rata_harian_b${i}`]) * 100).toFixed(2)) : 0;
     D[`pct_harian_plafon_b${i}`] = D.plafon ? parseFloat(((D[`rata_harian_b${i}`] / D.plafon) * 100).toFixed(2)) : 0;
+    D[`pct_utle_b${i}`] = inf ? parseFloat((((D[`utle_b${i}`] || 0) / inf) * 100).toFixed(2)) : 0;
     tw_in += inf; tw_out += outf; tw_utle += (D[`utle_b${i}`] || 0);
   }
   D['in_tw'] = tw_in; D['out_tw'] = tw_out; D['utle_tw'] = tw_utle;
@@ -829,6 +893,7 @@ function computeData(D) {
   D['nom_net_tw'] = Math.abs(net_tw);
   D['status_net_tw'] = net_tw > 0 ? 'Inflow' : ((net_tw < 0 ? 'Outflow' : 'Balance'));
   D['tot_inout_tw'] = tw_in + tw_out;
+  D['pct_utle_tw'] = tw_in ? parseFloat(((tw_utle / tw_in) * 100).toFixed(2)) : 0;
 }
 
 // ============================================================
@@ -1045,7 +1110,22 @@ function saveUIState() { localStorage.setItem('Kastip_UI_State', JSON.stringify(
 function changeKpw() { 
     if(el('kpwSelector').value === 'ADD_NEW') {
         let newVal = prompt("Masukkan Nama KPwDN Baru:");
-        if(newVal && newVal.trim() !== '') { currentKpw = newVal.toUpperCase(); initSelectors(); el('kpwSelector').value = currentKpw; showToast("Isi form lalu Kalkulasi."); scrollToEdit(); el('edit_kpw').value = currentKpw; return; }
+        if(newVal && newVal.trim() !== '') { 
+            currentKpw = newVal.toUpperCase().trim(); 
+            const slotId = currentKpw + '_';
+            if(!DATA_STORE[currentTahun]) DATA_STORE[currentTahun] = {};
+            if(!DATA_STORE[currentTahun][currentTriwulan]) DATA_STORE[currentTahun][currentTriwulan] = {};
+            if(!DATA_STORE[currentTahun][currentTriwulan][slotId]) {
+                DATA_STORE[currentTahun][currentTriwulan][slotId] = { kpw: currentKpw, kt: '' };
+            }
+            initSelectors(); 
+            el('kpwSelector').value = currentKpw; 
+            showToast("Isi form lalu Kalkulasi."); 
+            scrollToEdit(); 
+            el('edit_kpw').value = currentKpw; 
+            el('edit_kt').value = '';
+            return; 
+        }
         else { el('kpwSelector').value = currentKpw; return; }
     }
     currentKpw = el('kpwSelector').value; updateKtSelector(); renderAll(); saveUIState(); 
@@ -1053,7 +1133,22 @@ function changeKpw() {
 function changeKt() { 
     if(el('ktSelector').value === 'ADD_NEW') {
         let newVal = prompt("Masukkan Nama Kas Titipan Baru:");
-        if(newVal && newVal.trim() !== '') { currentKt = currentKpw + '_' + newVal.toUpperCase(); updateKtSelector(); el('ktSelector').value = currentKt; showToast("Isi form lalu Kalkulasi."); scrollToEdit(); el('edit_kt').value = newVal.toUpperCase(); return; }
+        if(newVal && newVal.trim() !== '') { 
+            let ktName = newVal.toUpperCase().trim();
+            currentKt = currentKpw + '_' + ktName; 
+            if(!DATA_STORE[currentTahun]) DATA_STORE[currentTahun] = {};
+            if(!DATA_STORE[currentTahun][currentTriwulan]) DATA_STORE[currentTahun][currentTriwulan] = {};
+            if(!DATA_STORE[currentTahun][currentTriwulan][currentKt]) {
+                DATA_STORE[currentTahun][currentTriwulan][currentKt] = { kpw: currentKpw, kt: ktName };
+            }
+            updateKtSelector(); 
+            el('ktSelector').value = currentKt; 
+            showToast("Isi form lalu Kalkulasi."); 
+            scrollToEdit(); 
+            el('edit_kpw').value = currentKpw;
+            el('edit_kt').value = ktName; 
+            return; 
+        }
         else { el('ktSelector').value = currentKt; return; }
     }
     currentKt = el('ktSelector').value; renderAll(); saveUIState(); 
@@ -1064,13 +1159,37 @@ function changeKt() {
 // ============================================================
 const MAP_COORDS = {"TANA PASER": [-1.9000, 116.1833], "SINTANG": [0.0673, 111.4981], "KETAPANG": [-1.8490, 109.9723], "SINGKAWANG": [0.9025, 108.9806], "PUTUSSIBAU": [0.8354, 112.9288], "BATULICIN": [-3.4478, 115.9926], "TANJUNG": [-2.1706, 115.3948], "SAMPIT": [-2.5358, 112.9510], "MUARA TEWEH": [-0.9497, 114.8872], "PANGKALAN BUN": [-2.6828, 111.6167], "BUNTOK": [-1.7167, 114.8333], "NANGA BULIK": [-1.8471, 111.4883], "SANGATTA": [0.4900, 117.5447], "TANJUNG REDEB": [2.1481, 117.4913], "SENDAWAR": [-0.2319, 115.8239], "TANJUNG SELOR": [2.8361, 117.3653], "MALINAU": [3.5833, 116.6333], "NUNUKAN": [4.1333, 117.6500], "TAKENGON": [4.6289, 96.8402], "LANGSA": [4.4681, 97.9733], "RANTAUPRAPAT": [2.1005, 99.8253], "BLANGPIDIE": [3.8185, 96.8329], "MEULABOH": [4.1444, 96.1278], "LUBUK LINGGAU": [-3.2965, 102.8624], "MANNA": [-4.4608, 102.8988], "MUKO-MUKO": [-2.5694, 101.1207], "MUARA BUNGO": [-1.4984, 102.1201], "KUALA TUNGKAL": [-0.8142, 103.4650], "TANJUNGPANDAN": [-2.7350, 107.6322], "TANJUNGPINANG": [0.9167, 104.4500], "TANJUNG BALAI KARIMUN": [0.9995, 103.4297], "NATUNA": [3.9475, 108.3842], "LIWA": [-5.0345, 104.0483], "RENGAT": [-0.3800, 102.5489], "PASIR PENGARAIAN": [0.8660, 100.3204], "SUNGAI PENUH": [-2.0620, 101.3856], "BATURAJA": [-4.1311, 104.1670], "MUSI BANYUASIN": [-2.8986, 103.8268], "KABANJAHE": [3.1004, 98.4901], "SUBULUSSALAM": [2.6371, 97.9897], "GUNUNG SITOLI": [1.2858, 97.6186], "BALIGE": [2.3338, 99.0654], "PADANGSIDIMPUAN": [1.3725, 99.2737], "POHUWATO": [0.4566, 121.9427], "POLEWALI MANDAR": [-3.4140, 119.3444], "PALOPO": [-2.9983, 120.1983], "PAREPARE": [-4.0152, 119.6263], "BULUKUMBA": [-5.5562, 120.1911], "BONE": [-4.5377, 120.3292], "MALILI": [-2.6074, 121.1444], "TOLITOLI": [1.0333, 120.8167], "LUWUK": [-0.9506, 122.7884], "POSO": [-1.3969, 120.7523], "PASANGKAYU": [-1.1747, 119.3792], "BUNGKU": [-2.5401, 121.9790], "BAUBAU": [-5.4627, 122.5997], "KOLAKA": [-4.0483, 121.5975], "TAHUNA": [3.6111, 125.4851], "MELONGUANE": [4.0041, 126.6669], "SIAU": [2.7214, 125.3853], "NAMLEA": [-3.2505, 127.0862], "SAUMLAKI": [-7.9863, 131.2967], "TUAL": [-5.6378, 132.7483], "LABUHA": [-0.6277, 127.4777], "TOBELO": [1.7314, 128.0069], "BIMA": [-8.4552, 118.7299], "SUMBAWA": [-8.4975, 117.4264], "MAUMERE": [-8.6214, 122.2111], "WAINGAPU": [-9.6467, 120.2644], "ATAMBUA": [-9.1105, 124.8911], "RUTENG": [-8.6146, 120.4682], "ENDE": [-8.8415, 121.6575], "LEWOLEBA": [-8.3700, 123.4072], "WAIKABUBAK": [-9.6372, 119.4180], "LABUAN BAJO": [-8.4908, 119.8803], "ALOR": [-8.2235, 124.5828], "FAKFAK": [-2.9238, 132.2965], "SORONG": [-0.8814, 131.2941], "TIMIKA": [-4.5369, 136.8833], "BIAK": [-1.1788, 136.0906], "MERAUKE": [-8.4897, 140.3958], "WAMENA": [-4.0957, 138.9483], "SERUI": [-1.8803, 136.2514], "NABIRE": [-3.3644, 135.4950], "BINTUNI": [-2.1226, 133.5186], "SORONG SELATAN": [-1.5034, 131.9961], "SUMENEP": [-7.0167, 113.8667], "DKI JAKARTA": [-6.2088, 106.8456], "JAWA BARAT": [-6.9175, 107.6191], "JAWA TENGAH": [-6.9932, 110.4203], "DIY": [-8.7933, 110.3167], "JAWA TIMUR": [-7.2504, 112.7688], "BALI": [-8.6705, 115.2126], "NTT": [-10.1788, 123.5815], "PROVINSI NTT": [-10.1788, 123.5815], "PAPUA": [-2.5337, 140.7181], "MALUKU": [-3.6954, 128.1814], "SULAWESI SELATAN": [-5.1476, 119.4327]};
 
-let geoMap = null; let mapMarkers = [];
+let geoMap = null; let mapMarkers = []; let isMapAllActive = false;
 
 function initGeoMap(D) {
     if (typeof L === 'undefined') return; 
+
+    if (isMapAllActive) {
+        isMapAllActive = false;
+        let btn = el('btnMapAll');
+        if(btn) {
+            btn.innerHTML = "Petakan Semua";
+            btn.style.background = "var(--bg-body)";
+            btn.style.color = "var(--text-main)";
+            btn.style.borderColor = "var(--border-light)";
+        }
+    }
+
     if (!geoMap) {
         geoMap = L.map('leafletMap').setView([-2.5489, 118.0149], 5);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM' }).addTo(geoMap);
+        // Peta mode Satelit HD (Esri World Imagery)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, USDA, USGS, GIS User Community'
+        }).addTo(geoMap);
+        // Overlay Batas Wilayah & Label Tempat (Esri World Boundaries and Places)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+            attribution: ''
+        }).addTo(geoMap);
+    } else {
+        // Atasi Bug Grey Box Leaflet dengan memaksa Leaflet menghitung ulang ukuran kontainer
+        setTimeout(() => {
+            geoMap.invalidateSize();
+        }, 100);
     }
     mapMarkers.forEach(m => geoMap.removeLayer(m)); mapMarkers = [];
     let bankPeserta = [];
@@ -1098,6 +1217,70 @@ function initGeoMap(D) {
         });
         if(bounds.length > 1) geoMap.fitBounds(L.latLngBounds(bounds), {padding: [40, 40], maxZoom: 12}); else geoMap.setView(coords, 7, {animate: true});
     } else { geoMap.setView([-2.5489, 118.0149], 5, {animate: true}); }
+}
+
+function toggleMapAll() {
+    if(!geoMap) return;
+
+    let btn = el('btnMapAll');
+    if (isMapAllActive) {
+        isMapAllActive = false;
+        if(btn) {
+            btn.innerHTML = "Petakan Semua";
+            btn.style.background = "var(--bg-body)";
+            btn.style.color = "var(--text-main)";
+            btn.style.borderColor = "var(--border-light)";
+        }
+        
+        let D = currentKpw === 'NASIONAL' ? getNationalData(currentTahun, currentTriwulan) : 
+                (currentTriwulan === 'ALL' ? (currentKt ? getYearlyData(currentTahun, currentKt.split('_')[0], currentKt.split('_')[1]) : null) : 
+                (DATA_STORE[currentTahun]?.[currentTriwulan]?.[currentKt]));
+        initGeoMap(D || {});
+        return;
+    }
+
+    isMapAllActive = true;
+    if(btn) {
+        btn.innerHTML = "Tutup Pemetaan";
+        btn.style.background = "var(--red-bg)";
+        btn.style.color = "var(--red-val)";
+        btn.style.borderColor = "var(--red-val)";
+    }
+
+    mapMarkers.forEach(m => geoMap.removeLayer(m)); mapMarkers = [];
+    let bounds = [];
+    let listToMap = [];
+    if (currentTriwulan === 'ALL') {
+        let uniqueKastips = {};
+        ['Q1', 'Q2', 'Q3', 'Q4'].forEach(q => {
+            if (DATA_STORE[currentTahun] && DATA_STORE[currentTahun][q]) {
+                Object.values(DATA_STORE[currentTahun][q]).forEach(d => {
+                    let key = d.kpw + '_' + d.kt;
+                    if (!uniqueKastips[key]) {
+                        uniqueKastips[key] = getYearlyData(currentTahun, d.kpw, d.kt);
+                    }
+                });
+            }
+        });
+        listToMap = Object.values(uniqueKastips);
+    } else {
+        if (DATA_STORE[currentTahun] && DATA_STORE[currentTahun][currentTriwulan]) {
+            listToMap = Object.values(DATA_STORE[currentTahun][currentTriwulan]);
+        }
+    }
+    
+    listToMap.forEach(D => {
+        if(!D) return;
+        let kName = (D.kt || "").toUpperCase().trim(); let kpwName = (D.kpw || "").toUpperCase().trim();
+        let coords = MAP_COORDS[kName] || MAP_COORDS[kpwName] || MAP_COORDS[kpwName.replace('PROVINSI ', '')];
+        if(coords) {
+            let color = D.status_net_tw === 'Outflow' ? '#b91c1c' : '#15803d';
+            let m = L.circleMarker(coords, { color: color, fillColor: color, fillOpacity: 0.8, radius: 8 }).addTo(geoMap);
+            m.bindPopup(`<b>KPwDN: ${D.kpw}</b><br>Kas Titipan: ${D.kt}<br>Netflow: ${fmt(D.nom_net_tw)}`); 
+            mapMarkers.push(m); bounds.push(coords);
+        }
+    });
+    if(bounds.length > 0) geoMap.fitBounds(L.latLngBounds(bounds), {padding: [40, 40], maxZoom: 6});
 }
 
 function handleFileUpload(event) {
@@ -1140,61 +1323,102 @@ function handleFileUpload(event) {
 
       function standardizeKey(str) {
           if (!str) return '';
-          let s = String(str).toLowerCase().replace(/[^a-z0-9]/g, '');
-          s = s.replace(/jan|apr|jul|okt/g, 'bulan1');
-          s = s.replace(/feb|mei|ags|nov/g, 'bulan2');
-          s = s.replace(/mar|jun|sep|des/g, 'bulan3');
-          s = s.replace(/padabulan/g, 'bulan');
-          s = s.replace(/selamabulan/g, 'bulan');
+          let s = String(str).toLowerCase().trim();
+          let sRaw = s.replace(/[^a-z0-9]/g, '');
+          
+          // Exact or highly specific matches to prevent collisions
+          if (sRaw === 'kpwdn' || sRaw === 'kpwdnpengawas') return 'kpwdn';
+          if (sRaw === 'kastitipan' || sRaw === 'kt') return 'kt';
+          if (s.includes('jumlah bank peserta') || s.includes('jumlah bank terdaftar') || s.includes('jumlah peserta') || s.includes('jml peserta') || s.includes('jumlah perbankan') || s === 'jumlah bank') return 'jml_perbankan';
+          if (sRaw === 'namabankpengelola' || sRaw === 'pengelola') return 'pengelola';
+          if (sRaw === 'nomorpks' || sRaw === 'nopks') return 'no_pks';
+          if (sRaw === 'tanggalpks' || sRaw === 'tglpks') return 'tgl_pks';
+          if (s.includes('%') || s.includes('persentase') || sRaw.includes('pct')) {
+              if (s.includes('peserta')) return 'pct_kepesertaan';
+              if (sRaw === 'persentase' || sRaw === 'pctkepesertaan') return 'pct_kepesertaan';
+          }
+          if (sRaw === 'namabankpeserta' || sRaw === 'peserta' || s.includes('nama bank') || (s.includes('bank') && s.includes('peserta') && !s.includes('jumlah'))) return 'peserta';
+          if (sRaw === 'plafon' || sRaw === 'plafonkastitipan') return 'plafon';
+          
+          if (s.includes('penarikan') && s.includes('terbesar')) return 'tarik_nama';
+          if (s.includes('nominal') && s.includes('penarikan')) return 'tarik_nom';
+          if (s.includes('frekuensi') && s.includes('penarikan')) return 'tarik_frek';
+          if (s.includes('alasan') && s.includes('penarikan')) return 'tarik_alasan';
+          
+          if (s.includes('penyetoran') && s.includes('terbesar')) return 'setor_nama';
+          if (s.includes('nominal') && s.includes('penyetoran')) return 'setor_nom';
+          if (s.includes('frekuensi') && s.includes('penyetoran')) return 'setor_frek';
+          if (s.includes('alasan') && s.includes('penyetoran')) return 'setor_alasan';
 
-          if (s.includes('bantuanoperasional') || s.includes('biayaoperasional')) {
-              s = 'biayaoperasional' + (s.includes('bulan1')?'bulan1':s.includes('bulan2')?'bulan2':s.includes('bulan3')?'bulan3':'');
-          }
-          if (s.includes('pengolahanutle')) {
-              s = 'biayapengolahanutle' + (s.includes('bulan1')?'bulan1':s.includes('bulan2')?'bulan2':s.includes('bulan3')?'bulan3':'');
-          }
-          if ((s.includes('biayaasuransi') || s.includes('penggantianbiayaasuransi')) && !s.includes('perubahan') && !s.includes('nama') && !s.includes('jenis')) {
-              s = 'biayaasuransi' + (s.includes('bulan1')?'bulan1':s.includes('bulan2')?'bulan2':s.includes('bulan3')?'bulan3':'');
-          }
-          if (s.includes('pemeliharaan')) s = 'biayapemeliharaan';
-          if (s.includes('pendirian')) s = 'biayapendirian';
+          // Monthly rules based on month names
+          // Bulan 1: Jan, Apr, Jul, Okt
+          // Bulan 2: Feb, Mei, Ags, Nov
+          // Bulan 3: Mar, Jun, Sep, Des
+          let mIdx = 0;
+          if (/\b(januari|jan|april|apr|juli|jul|oktober|okt|bulan 1|bulan1)\b/.test(s)) mIdx = 1;
+          else if (/\b(februari|feb|mei|agustus|ags|agu|november|nov|bulan 2|bulan2)\b/.test(s)) mIdx = 2;
+          else if (/\b(maret|mar|juni|jun|september|sep|desember|des|bulan 3|bulan3)\b/.test(s)) mIdx = 3;
 
+          if (mIdx > 0) {
+              if (s.includes('inflow') && !s.includes('outflow')) return `in_b${mIdx}`;
+              if (s.includes('outflow')) return `out_b${mIdx}`;
+              if ((s.includes('rata-rata saldo harian') || s.includes('rata rata saldo harian')) && !s.includes('%') && !s.includes('plafon') && !s.includes('pkse') && !s.includes('persentase')) return `rata_harian_b${mIdx}`;
+              if ((s.includes('rata-rata saldo pkse') || s.includes('rata rata saldo pkse')) && !s.includes('%') && !s.includes('plafon') && !s.includes('persentase')) return `rata_pkse_b${mIdx}`;
+              if (s.includes('utle') && s.includes('setoran')) return `pct_utle_b${mIdx}`;
+              if (s.includes('utle') && s.includes('disetor')) return `utle_b${mIdx}`;
+              if (s.includes('pengeluaran')) return `pengeluaran_b${mIdx}`;
+              if (s.includes('bantuan operasional') || s.includes('bantuan biaya operasional') || s.includes('biaya operasional') || s.includes('bops')) return `bops_b${mIdx}`;
+              if (s.includes('pengolahan utle') || s.includes('biaya pengolahan utle')) return `b_utle_b${mIdx}`;
+              if (s.includes('asuransi')) return `b_asuransi_b${mIdx}`;
+          }
+
+          // Triwulan aggregates
+          if (s.includes('dropping') && s.includes('jumlah')) return 'drop_jml';
+          if (s.includes('dropping') && s.includes('frekuensi')) return 'drop_frek';
+          if (s.includes('pengambilan') && s.includes('jumlah')) return 'ambil_jml';
+          if (s.includes('pengambilan') && s.includes('frekuensi')) return 'ambil_frek';
           if (s.includes('utle') && s.includes('triwulan')) {
-              if (s.includes('persentase')) s = 'persentaseutletriwulan';
-              else if (s.includes('jumlah')) s = 'jumlahutletriwulan';
-          }
-          if (s.includes('persentase') && s.includes('utle') && s.includes('bulan')) {
-              s = 'persentaseutledarisetoran' + (s.includes('bulan1')?'bulan1':s.includes('bulan2')?'bulan2':'bulan3');
-          }
-          if (s.includes('jumlah') && s.includes('utle') && s.includes('bulan')) {
-              s = 'jumlahutleyangdisetor' + (s.includes('bulan1')?'bulan1':s.includes('bulan2')?'bulan2':'bulan3');
+              if (s.includes('persentase')) return 'pct_utle_tw';
+              if (s.includes('jumlah') || s.includes('disetor')) return 'utle_tw';
           }
 
-          if (s === 'namabankpengelola' || s === 'pengelola') s = 'pengelola';
-          if (s === 'namabankpeserta' || s === 'jumlahbankpesertaaktif' || s === 'peserta') s = 'peserta';
-          if (s.includes('persentasekepesertaan')) s = 'persentasekepesertaan';
+          // Service and other costs
+          if (s.includes('layanan penukaran') && s.includes('pada')) return 'lyn_penukaran';
+          if (s.includes('jadwal') && s.includes('penukaran')) return 'lyn_jadwal';
+          if (s.includes('realisasi penukaran')) return 'lyn_realisasi';
+          if (s.includes('jumlah penukar')) return 'lyn_penukar';
+          if (s.includes('pemeliharaan')) return 'b_pelihara';
+          if (s.includes('pendirian')) return 'b_diri';
 
-          if (s.includes('penarikan') && s.includes('terbesar')) {
-              if (s.includes('nominal')) s = 'nominaljumlahpenarikan';
-              else if (s.includes('frekuensi')) s = 'frekuensipenarikan';
-              else if (s.includes('alasan')) s = 'alasanpenarikan';
-              else s = 'penarikanterbesar';
-          }
-          if (s.includes('penyetoran') && s.includes('terbesar')) {
-              if (s.includes('nominal')) s = 'nominaljumlahpenyetoran';
-              else if (s.includes('frekuensi')) s = 'frekuensipenyetoran';
-              else if (s.includes('alasan')) s = 'alasanpenyetoran';
-              else s = 'penyetoranterbesar';
-          }
+          // Asuransi & PJPUR
+          if (s.includes('perubahan data asuransi')) return 'asr_ubah';
+          if (s.includes('asuransi') && (s.includes('nama') || s.includes('perusahaan'))) return 'asr_nama';
+          if (s.includes('jenis asuransi')) return 'asr_jenis';
+          if (s.includes('nomor polis') || (s.includes('polis') && !s.includes('limit') && !s.includes('cis') && !s.includes('cicb') && !s.includes('cit') && !s.includes('maksimal'))) return 'asr_polis';
+          if (s.includes('jangka waktu')) return 'asr_waktu';
+          if (s.includes('obyek') || s.includes('lokasi pertanggungan')) return 'asr_obyek';
+          if (s.includes('cis')) return 'asr_cis';
+          if (s.includes('cicb')) return 'asr_cicb';
+          if (s.includes('cit')) return 'asr_cit';
+          
+          if (s.includes('saldo akhir') && !s.includes('harian') && !s.includes('pkse')) return 'saldo_tw';
+          if (s.includes('perluasan jaminan')) return 'asr_luas';
+          if (s.includes('deductible')) return 'asr_deduct';
+          if (s.includes('suku premi')) return 'asr_suku';
+          if (s.includes('perhitungan premi')) return 'asr_hitung';
+          if (s.includes('ko asuransi')) return 'asr_ko';
+          if (s.includes('pjpur di wilayah') || s.includes('pjpur diwilayah')) return 'pjpur_ada';
+          if (s.includes('nama pjpur')) return 'pjpur_nama';
+          if (s.includes('daerah operasional pjpur')) return 'pjpur_lokasi';
 
-          if (s.includes('jumlahrealisasipenukaran')) s = 'jumlahrealisasipenukaran';
-          if (s.includes('perubahandataasuransi')) s = 'apakahadaperubahandataasuransi';
-          if (s.includes('pjpurdiwilayah')) s = 'apakahterdapatpjpurdiwilayahkastitipan';
-          if (s.includes('pelaporanterlambat')) s = 'apakahterdapatpelaporanyangterlambat';
-          if (s.includes('nopks') || s === 'nomorpks') s = 'nomorpks';
-          if (s.includes('tglpks') || s === 'tanggalpks') s = 'tanggalpks';
+          // Report & Findings
+          if (s.includes('pelaporan') && s.includes('terlambat')) return 'lap_telat';
+          if (s.includes('upaya kpwdn') || s.includes('melakukan pembinaan')) return 'lap_bina';
+          if (s.includes('tanggal pelaksanaan')) return 'lap_tgl';
+          if (s.includes('jumlah temuan')) return 'lap_temuan';
 
-          return s; 
+          // Fallback to strict alphanumeric
+          return sRaw; 
       }
 
       workbook.SheetNames.forEach(sheetName => {
@@ -1207,7 +1431,8 @@ function handleFileUpload(event) {
               if (Array.isArray(rawData[i])) {
                   let found = rawData[i].some(cell => {
                       if (cell === null || cell === undefined) return false;
-                      return String(cell).toLowerCase().replace(/[^a-z0-9]/g, '') === 'kpwdn';
+                      let cRaw = String(cell).toLowerCase().replace(/[^a-z0-9]/g, '');
+                      return cRaw === 'kpwdn' || cRaw === 'kpwdnpengawas';
                   });
                   if (found) { headerIndex = i; break; }
               }
@@ -1215,18 +1440,26 @@ function handleFileUpload(event) {
 
           if (headerIndex === -1) return;
 
+          // Deteksi Triwulan secara cerdas (mendukung Angka Romawi & Teks Kasar)
           let detectedTriwulan = currentTriwulan === 'ALL' ? 'Q4' : currentTriwulan;
-          let sName = sheetName.toLowerCase();
-          if (sName.includes('q1') || sName.includes('triwulan 1')) detectedTriwulan = 'Q1';
-          else if (sName.includes('q2') || sName.includes('triwulan 2')) detectedTriwulan = 'Q2';
-          else if (sName.includes('q3') || sName.includes('triwulan 3')) detectedTriwulan = 'Q3';
-          else if (sName.includes('q4') || sName.includes('triwulan 4')) detectedTriwulan = 'Q4';
+          let sName = sheetName.toLowerCase().trim();
+          if (/\b(q1|triwulan[_\s-]*1|triwulan[_\s-]*i|tw[_\s-]*i)\b/.test(sName)) detectedTriwulan = 'Q1';
+          else if (/\b(q2|triwulan[_\s-]*2|triwulan[_\s-]*ii|tw[_\s-]*ii)\b/.test(sName)) detectedTriwulan = 'Q2';
+          else if (/\b(q3|triwulan[_\s-]*3|triwulan[_\s-]*iii|tw[_\s-]*iii)\b/.test(sName)) detectedTriwulan = 'Q3';
+          else if (/\b(q4|triwulan[_\s-]*4|triwulan[_\s-]*iv|tw[_\s-]*iv)\b/.test(sName)) detectedTriwulan = 'Q4';
           else {
               let headerStr = rawData[headerIndex].map(h => String(h||'').toLowerCase().trim()).join(" ");
               if (/\b(jan|feb|mar)\b/.test(headerStr)) detectedTriwulan = 'Q1';
               else if (/\b(apr|mei|jun)\b/.test(headerStr)) detectedTriwulan = 'Q2';
               else if (/\b(jul|ags|sep)\b/.test(headerStr)) detectedTriwulan = 'Q3';
               else if (/\b(okt|nov|des)\b/.test(headerStr)) detectedTriwulan = 'Q4';
+          }
+
+          // Deteksi Tahun secara cerdas dari nama sheet jika tersedia
+          let targetTahun = currentTahun;
+          const yearMatch = sheetName.match(/\b(20\d{2})\b/);
+          if (yearMatch) {
+              targetTahun = yearMatch[1];
           }
 
           const headerRow = rawData[headerIndex];
@@ -1244,12 +1477,12 @@ function handleFileUpload(event) {
                   }
               }
 
-              let kpwVal = rowDataObj[standardizeKey('KPwDN')];
-              let ktVal = rowDataObj[standardizeKey('Kas Titipan')];
+              let kpwVal = rowDataObj['kpwdn'];
+              let ktVal = rowDataObj['kt'];
 
               if(kpwVal && ktVal) {
-                  let strTahun = rowDataObj[standardizeKey('Tahun')];
-                  let strTriwulan = rowDataObj[standardizeKey('Triwulan')];
+                  let strTahun = rowDataObj['tahun'];
+                  let strTriwulan = rowDataObj['triwulan'];
                   
                   let rowTahun = strTahun ? strTahun.toString().trim() : targetTahun;
                   let rowTriwulan = strTriwulan ? strTriwulan.toString().toUpperCase().trim() : detectedTriwulan;
@@ -1352,13 +1585,54 @@ function handleFileUpload(event) {
 }
 
 function exportDataExcel() {
-  const isAll = currentTriwulan === 'ALL'; const rows = []; 
+  const isAll = currentTriwulan === 'ALL';
+  const wb = XLSX.utils.book_new();
+
   if (isAll) {
-      let uniqueIds = new Set();
-      ['Q1', 'Q2', 'Q3', 'Q4'].forEach(q => { if(DATA_STORE[currentTahun] && DATA_STORE[currentTahun][q]) Object.keys(DATA_STORE[currentTahun][q]).forEach(id => uniqueIds.add(id)); });
-      if(uniqueIds.size === 0) { rows.push(buildYearlyRow(currentTahun, '', '')); showToast("📝 Membuat Template 1 Tahun Penuh..."); } 
-      else { uniqueIds.forEach(id => { let parts = id.split('_'); rows.push(buildYearlyRow(currentTahun, parts[0], parts[1])); }); showToast("📊 Excel 1 Tahun Penuh ditarik!"); }
+      // Rekap 1 Tahun: Ekspor setiap Triwulan (Q1, Q2, Q3, Q4) ke lembar terpisah!
+      let hasAnyData = false;
+      const qRoman = { 'Q1': 'I', 'Q2': 'II', 'Q3': 'III', 'Q4': 'IV' };
+      const mNames = { 'Q1': ['Jan', 'Feb', 'Mar'], 'Q2': ['Apr', 'Mei', 'Jun'], 'Q3': ['Jul', 'Ags', 'Sep'], 'Q4': ['Okt', 'Nov', 'Des'] };
+
+      ['Q1', 'Q2', 'Q3', 'Q4'].forEach(q => {
+          const qData = (DATA_STORE[currentTahun] && DATA_STORE[currentTahun][q]) ? DATA_STORE[currentTahun][q] : {};
+          const keys = Object.keys(qData);
+          
+          if (keys.length > 0) {
+              hasAnyData = true;
+              const qRows = [];
+              let m1 = mNames[q]?.[0] || 'Bulan 1', m2 = mNames[q]?.[1] || 'Bulan 2', m3 = mNames[q]?.[2] || 'Bulan 3';
+              
+              keys.forEach(key => {
+                  const row = {};
+                  row['Tahun'] = currentTahun;
+                  row['Triwulan'] = q;
+                  
+                  DATA_SCHEMA.forEach(f => {
+                      let label = f.label.replace('Bulan 1', m1).replace('Bulan 2', m2).replace('Bulan 3', m3);
+                      row[label] = qData[key][f.id] !== undefined ? qData[key][f.id] : '';
+                  });
+                  qRows.push(row);
+              });
+              
+              const ws = XLSX.utils.json_to_sheet(qRows);
+              for (let key in ws) { if (key[0] !== '!' && typeof ws[key].v === 'number') ws[key].z = '#,##0'; }
+              
+              const sheetName = `TW - ${qRoman[q]} ${currentTahun}`;
+              XLSX.utils.book_append_sheet(wb, ws, sheetName);
+          }
+      });
+
+      if (!hasAnyData) {
+          showToast("❌ Tidak ada data untuk diekspor!");
+          return;
+      }
+      
+      XLSX.writeFile(wb, `Report_Kastip_Rekap_${currentTahun}.xlsx`);
+      showToast("📊 Excel Rekap Tahunan ditarik dengan Lembar Terpisah!");
   } else {
+      // Triwulan tunggal: Ekspor satu sheet saja
+      const rows = [];
       const currentData = (DATA_STORE[currentTahun] && DATA_STORE[currentTahun][currentTriwulan]) ? DATA_STORE[currentTahun][currentTriwulan] : {};
       let keys = Object.keys(currentData);
       const mNames = { 'Q1': ['Jan', 'Feb', 'Mar'], 'Q2': ['Apr', 'Mei', 'Jun'], 'Q3': ['Jul', 'Ags', 'Sep'], 'Q4': ['Okt', 'Nov', 'Des'] };
@@ -1381,9 +1655,15 @@ function exportDataExcel() {
               rows.push(row); 
           }); showToast("📊 Excel Triwulan ditarik!"); 
       }
+      
+      const ws = XLSX.utils.json_to_sheet(rows);
+      for (let key in ws) { if (key[0] !== '!' && typeof ws[key].v === 'number') ws[key].z = '#,##0'; }
+      
+      const qRoman = { 'Q1': 'I', 'Q2': 'II', 'Q3': 'III', 'Q4': 'IV' };
+      const sheetName = `TW - ${qRoman[currentTriwulan]} ${currentTahun}`;
+      XLSX.utils.book_append_sheet(wb, ws, sheetName);
+      XLSX.writeFile(wb, `Report_Kastip_${currentTahun}_${currentTriwulan}.xlsx`);
   }
-  const ws = XLSX.utils.json_to_sheet(rows); for (let key in ws) { if (key[0] !== '!' && typeof ws[key].v === 'number') ws[key].z = '#,##0'; }
-  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, `Data_${currentTahun}_${currentTriwulan}`); XLSX.writeFile(wb, `Report_Kastip_${currentTahun}_${currentTriwulan}.xlsx`);
 }
 
 function buildYearlyRow(tahun, kpw, kt) {
@@ -1497,24 +1777,36 @@ function renderAll() {
     setTxt('kv-tot-inout-kpi', 'Rp 0'); setTxt('kv-netflow-kpi', 'Rp 0');
     setTxt('kv-netflow-status', '-'); setStyle('kv-netflow-status-badge', 'background', 'var(--bg-body)'); setStyle('kv-netflow-status-badge', 'borderColor', 'var(--border-light)');
     
-    setTxt('lbl-net-1', lB1 + ':'); setTxt('lbl-net-2', lB2 + ':'); setTxt('lbl-net-3', lB3 + ':');
-    setStyle('wrap-net-4', 'display', 'none'); setStyle('wrap-net-3', 'borderBottom', 'none');
-    setTxt('lbl-sal-1', lB1 + ':'); setTxt('lbl-sal-2', lB2 + ':'); setTxt('lbl-sal-3', lB3 + ':');
-    setStyle('wrap-sal-4', 'display', 'none'); setStyle('wrap-sal-3', 'borderBottom', 'none');
-    
-    setTxt('kv-net-b1', 'Rp 0'); setTxt('kv-net-b2', 'Rp 0'); setTxt('kv-net-b3', 'Rp 0');
+    if (isAll) {
+        setTxt('lbl-net-1', 'Triwulan 1:'); setTxt('lbl-net-2', 'Triwulan 2:'); setTxt('lbl-net-3', 'Triwulan 3:'); setTxt('lbl-net-4', 'Triwulan 4:');
+        setStyle('wrap-net-4', 'display', 'flex'); setStyle('wrap-net-3', 'borderBottom', '1px solid var(--gold-val)');
+        setTxt('lbl-sal-1', 'Triwulan 1:'); setTxt('lbl-sal-2', 'Triwulan 2:'); setTxt('lbl-sal-3', 'Triwulan 3:'); setTxt('lbl-sal-4', 'Triwulan 4:');
+        setStyle('wrap-sal-4', 'display', 'flex'); setStyle('wrap-sal-3', 'borderBottom', '1px solid var(--teal-val)');
+        setTxt('lbl-utle-1', 'Triwulan 1:'); setTxt('lbl-utle-2', 'Triwulan 2:'); setTxt('lbl-utle-3', 'Triwulan 3:'); setTxt('lbl-utle-4', 'Triwulan 4:');
+        setStyle('wrap-utle-4', 'display', 'flex'); setStyle('wrap-utle-3', 'borderBottom', '1px solid var(--blue-primary)');
+        
+        setTxt('kv-net-b1', 'Rp 0'); setTxt('kv-net-b2', 'Rp 0'); setTxt('kv-net-b3', 'Rp 0'); setTxt('kv-net-b4', 'Rp 0');
+        setTxt('kv-rata-b1', 'Rp 0'); setTxt('kv-rata-b2', 'Rp 0'); setTxt('kv-rata-b3', 'Rp 0'); setTxt('kv-rata-b4', 'Rp 0');
+        setTxt('kv-utle-b1', 'Rp 0 (0%)'); setTxt('kv-utle-b2', 'Rp 0 (0%)'); setTxt('kv-utle-b3', 'Rp 0 (0%)'); setTxt('kv-utle-b4', 'Rp 0 (0%)');
+    } else {
+        setTxt('lbl-net-1', lB1 + ':'); setTxt('lbl-net-2', lB2 + ':'); setTxt('lbl-net-3', lB3 + ':');
+        setStyle('wrap-net-4', 'display', 'none'); setStyle('wrap-net-3', 'borderBottom', 'none');
+        setTxt('lbl-sal-1', lB1 + ':'); setTxt('lbl-sal-2', lB2 + ':'); setTxt('lbl-sal-3', lB3 + ':');
+        setStyle('wrap-sal-4', 'display', 'none'); setStyle('wrap-sal-3', 'borderBottom', 'none');
+        setTxt('lbl-utle-1', lB1 + ':'); setTxt('lbl-utle-2', lB2 + ':'); setTxt('lbl-utle-3', lB3 + ':');
+        setStyle('wrap-utle-4', 'display', 'none'); setStyle('wrap-utle-3', 'borderBottom', 'none');
+        
+        setTxt('kv-net-b1', 'Rp 0'); setTxt('kv-net-b2', 'Rp 0'); setTxt('kv-net-b3', 'Rp 0');
+        setTxt('kv-rata-b1', 'Rp 0'); setTxt('kv-rata-b2', 'Rp 0'); setTxt('kv-rata-b3', 'Rp 0');
+        setTxt('kv-utle-b1', 'Rp 0 (0%)'); setTxt('kv-utle-b2', 'Rp 0 (0%)'); setTxt('kv-utle-b3', 'Rp 0 (0%)');
+    }
     setTxt('kv-saldo-akhir-kpi', 'Rp 0'); setStyle('badge-saldo', 'display', 'none');
-    setTxt('kv-rata-b1', 'Rp 0'); setTxt('kv-rata-b2', 'Rp 0'); setTxt('kv-rata-b3', 'Rp 0');
-
     setTxt('kv-pct-in-text', 'IN 0%'); setTxt('kv-pct-out-text', 'OUT 0%');
     setStyle('bar-inflow', 'width', '0%'); setStyle('bar-outflow', 'width', '0%');
     setTxt('kv-avg-mutasi', 'Rp 0'); setTxt('kv-avg-netflow', 'Rp 0');
     setTxt('kv-ratio-netflow', '0%'); setTxt('kv-pct-plafon', '0%');
+    setStyle('box-inout-rincian', 'display', 'none');
     setTxt('ch-plafon-val', 'Rp 0'); setTxt('ch-saldo-val', 'Rp 0'); setTxt('kv-tot-biaya', 'Rp 0');
-
-    setTxt('lbl-utle-1', lB1 + ':'); setTxt('lbl-utle-2', lB2 + ':'); setTxt('lbl-utle-3', lB3 + ':');
-    setStyle('wrap-utle-4', 'display', 'none'); setStyle('wrap-utle-3', 'borderBottom', 'none');
-    setTxt('kv-utle-b1', 'Rp 0 (0%)'); setTxt('kv-utle-b2', 'Rp 0 (0%)'); setTxt('kv-utle-b3', 'Rp 0 (0%)');
     setTxt('kv-utle-jml', 'Rp 0'); setTxt('kv-utle-pct', '0%');
     setTxt('kv-asr-nama', '-'); setTxt('kv-asr-jenis', '-'); setTxt('kv-asr-polis', '-');
     setTxt('kv-asr-cis', 'Rp 0'); setTxt('kv-asr-cicb', 'Rp 0'); setTxt('kv-asr-cit', 'Rp 0');
@@ -1528,7 +1820,8 @@ function renderAll() {
 
   setTxt('kv-kpw', D.kpw || '-'); setTxt('kv-kt', D.kt || '-'); setTxt('kv-pengelola-main', D.pengelola || '-');
   setTxt('kv-no-pks', D.no_pks || '-'); setTxt('kv-tgl-pks', D.tgl_pks || '-'); setTxt('kv-peserta', D.peserta || '-');
-  setTxt('kv-jml-bank', D.jml_perbankan || '0'); setTxt('kv-pct-peserta', D.pct_kepesertaan ? D.pct_kepesertaan + (D.pct_kepesertaan.toString().includes('%') ? '' : '%') : '-');
+  let cBanks = D.peserta && D.peserta !== '-' ? D.peserta.split(',').length : 0;
+  setTxt('kv-jml-bank', D.jml_perbankan || cBanks || '0'); setTxt('kv-pct-peserta', D.pct_kepesertaan ? D.pct_kepesertaan + (D.pct_kepesertaan.toString().includes('%') ? '' : '%') : '-');
   setTxt('kv-setor-nama', D.setor_nama || '-'); setTxt('kv-setor-nom', fmt(D.setor_nom));
   setTxt('kv-tarik-nama', D.tarik_nama || '-'); setTxt('kv-tarik-nom', fmt(D.tarik_nom));
   setTxt('kv-temuan', D.lap_temuan || '0'); setTxt('kv-telat', D.lap_telat || '-');
@@ -1554,12 +1847,21 @@ function renderAll() {
       setStyle('wrap-net-4', 'display', 'flex'); setStyle('wrap-net-3', 'borderBottom', '1px solid var(--gold-val)');
       setTxt('lbl-sal-1', 'Triwulan 1:'); setTxt('lbl-sal-2', 'Triwulan 2:'); setTxt('lbl-sal-3', 'Triwulan 3:');
       setStyle('wrap-sal-4', 'display', 'flex'); setStyle('wrap-sal-3', 'borderBottom', '1px solid var(--teal-val)');
+      
+      setTxt('lbl-inflow-m1', 'Triwulan 1:'); setTxt('lbl-inflow-m2', 'Triwulan 2:'); setTxt('lbl-inflow-m3', 'Triwulan 3:');
+      setStyle('wrap-inflow-m4', 'display', 'flex'); setStyle('wrap-inflow-m3', 'borderBottom', '1px solid var(--green-val)');
+      setTxt('lbl-outflow-m1', 'Triwulan 1:'); setTxt('lbl-outflow-m2', 'Triwulan 2:'); setTxt('lbl-outflow-m3', 'Triwulan 3:');
+      setStyle('wrap-outflow-m4', 'display', 'flex'); setStyle('wrap-outflow-m3', 'borderBottom', '1px solid var(--red-val)');
+      setStyle('box-inout-rincian', 'display', 'flex');
 
       let n1=(D.q_in[0]||0)-(D.q_out[0]||0), n2=(D.q_in[1]||0)-(D.q_out[1]||0), n3=(D.q_in[2]||0)-(D.q_out[2]||0), n4=(D.q_in[3]||0)-(D.q_out[3]||0);
       setTxt('kv-net-b1', fmtNet(n1)); setStyle('kv-net-b1', 'color', n1>=0?'var(--green-val)':'var(--red-val)');
       setTxt('kv-net-b2', fmtNet(n2)); setStyle('kv-net-b2', 'color', n2>=0?'var(--green-val)':'var(--red-val)');
       setTxt('kv-net-b3', fmtNet(n3)); setStyle('kv-net-b3', 'color', n3>=0?'var(--green-val)':'var(--red-val)');
       setTxt('kv-net-b4', fmtNet(n4)); setStyle('kv-net-b4', 'color', n4>=0?'var(--green-val)':'var(--red-val)');
+      
+      setTxt('val-inflow-m1', fmt(D.q_in[0]||0)); setTxt('val-inflow-m2', fmt(D.q_in[1]||0)); setTxt('val-inflow-m3', fmt(D.q_in[2]||0)); setTxt('val-inflow-m4', fmt(D.q_in[3]||0));
+      setTxt('val-outflow-m1', fmt(D.q_out[0]||0)); setTxt('val-outflow-m2', fmt(D.q_out[1]||0)); setTxt('val-outflow-m3', fmt(D.q_out[2]||0)); setTxt('val-outflow-m4', fmt(D.q_out[3]||0));
       
       setTxt('kv-rata-b1', fmt(D.q_saldo[0]||0)); setTxt('kv-rata-b2', fmt(D.q_saldo[1]||0)); setTxt('kv-rata-b3', fmt(D.q_saldo[2]||0)); setTxt('kv-rata-b4', fmt(D.q_saldo[3]||0));
 
@@ -1574,11 +1876,20 @@ function renderAll() {
       setStyle('wrap-net-4', 'display', 'none'); setStyle('wrap-net-3', 'borderBottom', 'none');
       setTxt('lbl-sal-1', lB1+':'); setTxt('lbl-sal-2', lB2+':'); setTxt('lbl-sal-3', lB3+':');
       setStyle('wrap-sal-4', 'display', 'none'); setStyle('wrap-sal-3', 'borderBottom', 'none');
+      
+      setTxt('lbl-inflow-m1', lB1+':'); setTxt('lbl-inflow-m2', lB2+':'); setTxt('lbl-inflow-m3', lB3+':');
+      setStyle('wrap-inflow-m4', 'display', 'none'); setStyle('wrap-inflow-m3', 'borderBottom', 'none');
+      setTxt('lbl-outflow-m1', lB1+':'); setTxt('lbl-outflow-m2', lB2+':'); setTxt('lbl-outflow-m3', lB3+':');
+      setStyle('wrap-outflow-m4', 'display', 'none'); setStyle('wrap-outflow-m3', 'borderBottom', 'none');
+      setStyle('box-inout-rincian', 'display', 'flex');
 
       let n1=(D.in_b1||0)-(D.out_b1||0), n2=(D.in_b2||0)-(D.out_b2||0), n3=(D.in_b3||0)-(D.out_b3||0);
       setTxt('kv-net-b1', fmtNet(n1)); setStyle('kv-net-b1', 'color', n1>=0?'var(--green-val)':'var(--red-val)');
       setTxt('kv-net-b2', fmtNet(n2)); setStyle('kv-net-b2', 'color', n2>=0?'var(--green-val)':'var(--red-val)');
       setTxt('kv-net-b3', fmtNet(n3)); setStyle('kv-net-b3', 'color', n3>=0?'var(--green-val)':'var(--red-val)');
+      
+      setTxt('val-inflow-m1', fmt(D.in_b1||0)); setTxt('val-inflow-m2', fmt(D.in_b2||0)); setTxt('val-inflow-m3', fmt(D.in_b3||0));
+      setTxt('val-outflow-m1', fmt(D.out_b1||0)); setTxt('val-outflow-m2', fmt(D.out_b2||0)); setTxt('val-outflow-m3', fmt(D.out_b3||0));
       
       setTxt('kv-rata-b1', fmt(D.rata_harian_b1)); setTxt('kv-rata-b2', fmt(D.rata_harian_b2)); setTxt('kv-rata-b3', fmt(D.rata_harian_b3));
 
@@ -1659,14 +1970,43 @@ function renderAll() {
   renderTable(D); renderEditPanel(); initGeoMap(D);
 }
 
+// Fungsi validasi rumus matematika kustom yang sangat aman (Strict Sandbox)
+function validateFormula(expr, D) {
+    if (!expr) return false;
+    // Langkah 1: Hanya izinkan karakter matematika dasar, huruf, angka, kurung, dan titik
+    if (!/^[a-zA-Z0-9_+\-*/().\s]+$/.test(expr)) return false;
+    
+    // Langkah 2: Ekstrak semua kata (yang berpotensi sebagai nama variabel atau fungsi berbahaya seperti window/alert)
+    const words = expr.match(/[a-zA-Z_][a-zA-Z0-9_]*/g) || [];
+    
+    // Langkah 3: Semua kata yang terdeteksi HARUS merupakan kunci (parameter ID) resmi di data D
+    const allowedKeys = new Set(Object.keys(D));
+    for (let word of words) {
+        if (!allowedKeys.has(word)) {
+            return false; // Menemukan kata ilegal (bukan nama parameter di database)
+        }
+    }
+    return true;
+}
+
 function renderTable(D) {
   const term = el('tableSearch').value.toLowerCase(); let html = ''; let count = 1;
   const mNames = { 'Q1': ['Jan', 'Feb', 'Mar'], 'Q2': ['Apr', 'Mei', 'Jun'], 'Q3': ['Jul', 'Ags', 'Sep'], 'Q4': ['Okt', 'Nov', 'Des'] };
   let m1 = mNames[currentTriwulan]?.[0] || 'Bulan 1', m2 = mNames[currentTriwulan]?.[1] || 'Bulan 2', m3 = mNames[currentTriwulan]?.[2] || 'Bulan 3';
 
   DATA_SCHEMA.forEach(f => {
+    // HIDE monthly data when viewing 1 Year Recap, as it is meaningless to sum months across triwulans
+    if (currentTriwulan === 'ALL' && f.cat.includes('Bulan')) return;
+
     let dCat = f.cat.replace('Bulan 1', m1).replace('Bulan 2', m2).replace('Bulan 3', m3);
     let dLabel = f.label.replace('Bulan 1', m1).replace('Bulan 2', m2).replace('Bulan 3', m3);
+    
+    // In 1 Year view, replace the term 'Triwulan' with 'Satu Tahun' to reflect the aggregated nature
+    if (currentTriwulan === 'ALL') {
+        dCat = dCat.replace(/Triwulan/gi, '1 Tahun Penuh');
+        dLabel = dLabel.replace(/Triwulan/gi, '1 Tahun Penuh');
+    }
+
     if (term && !dLabel.toLowerCase().includes(term) && !dCat.toLowerCase().includes(term)) return;
     let val = D[f.id]; let disp = f.type === 'currency' ? fmt(val) : (f.type === 'percent' ? (val||0)+'%' : (f.type === 'number' ? (val?val.toLocaleString('id-ID'):'0') : val));
     html += `<tr style="${f.computed ? 'background:var(--bg-computed);font-weight:700;color:var(--blue-primary)' : ''}"><td>${count++}</td><td><span class="td-cat">${dCat}</span></td><td>${dLabel} ${f.computed ? '⚡' : ''}</td><td>${disp===''||disp===undefined?'-':disp}</td></tr>`;
@@ -1677,8 +2017,8 @@ function renderTable(D) {
       CUSTOM_FORMULAS.forEach(f => {
           let val = 0;
           
-          // SECURITY LAYER: Sanitasi Input Strict
-          const isSafe = /^[a-zA-Z0-9_+\-*/().\s]+$/.test(f.expr);
+          // SECURITY LAYER: Validasi Strict Sandbox menggunakan parameter database yang terdaftar
+          const isSafe = validateFormula(f.expr, D);
 
           if (!isSafe) {
               val = "⚠️ Rumus Ilegal diblokir!";
@@ -1812,6 +2152,12 @@ function applyEdit() {
   
   const slotId = inputKpw + '_' + inputKtName; 
   if(!DATA_STORE[currentTahun]) DATA_STORE[currentTahun] = {}; if(!DATA_STORE[currentTahun][currentTriwulan]) DATA_STORE[currentTahun][currentTriwulan] = {};
+  
+  // Mencegah duplikasi data: Hapus slot lama jika kunci identitas diubah oleh pengguna
+  if (currentKt && currentKt !== slotId) {
+      delete DATA_STORE[currentTahun][currentTriwulan][currentKt];
+  }
+  
   if(!DATA_STORE[currentTahun][currentTriwulan][slotId]) DATA_STORE[currentTahun][currentTriwulan][slotId] = { kpw: inputKpw, kt: inputKtName };
   
   const D = DATA_STORE[currentTahun][currentTriwulan][slotId];
@@ -1875,6 +2221,19 @@ function addCustomFormula() {
     if (!isSafe) {
         alert("❌ SISTEM KEAMANAN: Input Ditolak!\n\nRumus mengandung karakter ilegal. Anda hanya diizinkan menggunakan huruf, angka, underscore (_), dan simbol matematika dasar (+ - * /). Karakter eksekusi script dilarang.");
         return; 
+    }
+
+    // SECURITY LAYER: Validasi strict agar parameter yang digunakan benar-benar terdaftar
+    const allowedWords = new Set(DATA_SCHEMA.map(f => f.id).concat([
+        'kpw', 'kt', 'in_tw', 'out_tw', 'utle_tw', 'nom_net_tw', 'tot_inout_tw', 'status_net_tw',
+        'q_in', 'q_out', 'q_saldo', 'q_plafon', 'q_bops', 'q_utle', 'q_asuransi', 'q_pelihara', 'q_diri'
+    ]));
+    const inputWords = expr.match(/[a-zA-Z_][a-zA-Z0-9_]*/g) || [];
+    for (let word of inputWords) {
+        if (!allowedWords.has(word)) {
+            alert(`❌ SISTEM KEAMANAN: Parameter "${word}" tidak dikenali!\n\nAnda hanya boleh menggunakan ID parameter resmi yang ada di tabel laporan.`);
+            return;
+        }
     }
 
     let format = prompt("3. Pilih Format Output Visualisasi\nKetik 1 untuk Uang (Rp)\nKetik 2 untuk Persen (%)\nKetik 3 untuk Angka Biasa", "1");
