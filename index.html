@@ -239,6 +239,7 @@ div[style*="text-align: center; margin-top: 20px;"] {
         <option value="2028">Tahun 2028</option>
         <option value="2029">Tahun 2029</option>
         <option value="2030">Tahun 2030</option>
+        <option value="ADD_NEW">-Tambah Tahun...</option>
       </select>
       <select id="triwulanSelector" class="search-box" style="border-color: var(--blue-primary); color: var(--blue-primary);" onchange="changePeriode()">
         <option value="Q1">Triwulan 1</option>
@@ -824,6 +825,7 @@ async function unlockDashboard() {
   el('loginScreen').style.display = 'none'; document.body.style.overflowY = 'auto';
   el('mainApp').style.display = 'block';
   await loadData(); 
+  updateTahunDropdownList();
   const savedState = localStorage.getItem('Kastip_UI_State');
   if (savedState) {
       const state = JSON.parse(savedState);
@@ -1073,7 +1075,7 @@ function getNationalData(tahun, triwulan, groupFilter = null) {
     res.asr_polis = asrPolisSet.size > 0 ? 'Terdata' : '-';
     
     res.nom_net_tw = Math.abs(res.in_tw - res.out_tw);
-    res.status_net_tw = res.in_tw - res.out_tw >= 0 ? 'Inflow' : 'Outflow';
+    res.status_net_tw = (res.in_tw - res.out_tw) > 0 ? 'Inflow' : ((res.in_tw - res.out_tw) < 0 ? 'Outflow' : 'Balance');
     res.tot_inout_tw = res.in_tw + res.out_tw;
     
     res.pct_utle_tw = res.in_tw ? parseFloat(((res.utle_tw / res.in_tw) * 100).toFixed(2)) : 0;
@@ -1189,6 +1191,165 @@ try {
     REGION_GROUPS = defaultRegionGroups;
 }
 
+const TEMPLATE_KASTIPS = [
+  { kpw: 'Prov. Aceh', kt: 'Blangpidie', jml_perbankan: 2, pengelola: 'Bank Syariah Indonesia', no_pks: '27/7/PKS/BNA/B; Nomor 005/361-3/9047', tgl_pks: '27 Maret 2025', peserta: 'Bank Aceh Syariah, Bank Syariah Indonesia', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Aceh', kt: 'Meulaboh', jml_perbankan: 3, pengelola: 'Bank Syariah Indonesia', no_pks: '26/14/BnA/PKS/B;Nomor 04/002-3/18327', tgl_pks: '30 Juli 2024', peserta: 'Bank Aceh Syariah, Bank Syariah Indonesia, Bank Syariah Nasional', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Balikpapan', kt: 'Tana Paser', jml_perbankan: 9, pengelola: 'Bank Kaltimtara', no_pks: 'NO. 27/Bpp/P/B dan No. 0013/PKS/BPD-TPR/I/2025', tgl_pks: '12 Januari 2025', peserta: 'Bank Kaltimtara, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Bengkulu', kt: 'Lubuk Linggau', jml_perbankan: 14, pengelola: 'Bank Rakyat Indonesia', no_pks: '27/1/Bn/P/Rhs | No. B.215/KC-I/OPS/01/2025', tgl_pks: '21 Januari 2025', peserta: 'Bank Sumsel Babel, Bank Sumsel Babel Syariah, Bank Central Asia, Bank Negara Indonesia, BRI, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Mega, Bank Nobu, Bank Panin, Bank Sinarmas, Bank SMBC Indonesia', plafon: 250000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Bengkulu', kt: 'Manna', jml_perbankan: 7, pengelola: 'Bank Rakyat Indonesia', no_pks: '27/2/Bn/P/Rhs | No. B.2219/KC-XIX/OPS/05/2025', tgl_pks: '10 Mei 2025', peserta: 'Bank Bengkulu, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Mandiri, Bank Sinarmas', plafon: 150000000000, pct_kepesertaan: '70' },
+  { kpw: 'Prov. Bengkulu', kt: 'Muko-Muko', jml_perbankan: 5, pengelola: 'Bank Rakyat Indonesia', no_pks: '27/3/Bn/P/Rhs | No. 001/PKS/KTBI/CB.005/2025', tgl_pks: '25 Oktober 2025', peserta: 'Bank Bengkulu, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '83' },
+  { kpw: 'Prov. Gorontalo', kt: 'Pohuwato', jml_perbankan: 4, pengelola: 'Bank Sulutgo', no_pks: '27/18/GTO/P/B Nomor 004/PKS/MRS/V/2025', tgl_pks: '9 Mei 2025', peserta: 'Bank Sulutgo, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '75' },
+  { kpw: 'Prov. Jambi', kt: 'Kuala Tungkal', jml_perbankan: 8, pengelola: 'Bank Negara Indonesia', no_pks: '27/23/Jb/P/B | KLT/KASTIP/003/2025', tgl_pks: '4 Desember 2025', peserta: 'Bank Jambi, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Danamon, Bank Mandiri, Bank Panin', plafon: 150000000000, pct_kepesertaan: '88.9' },
+  { kpw: 'Prov. Jambi', kt: 'Muara Bungo', jml_perbankan: 10, pengelola: 'Bank Negara Indonesia', no_pks: '27/2/Jb/P/B | MRB/03/001/PKS/2025', tgl_pks: '19 Januari 2025', peserta: 'Bank Jambi, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Mandiri, Bank Maybank, Bank Panin, Bank Sinarmas', plafon: 300000000000, pct_kepesertaan: '91' },
+  { kpw: 'Prov. Jawa Timur', kt: 'Sumenep', jml_perbankan: 5, pengelola: 'Bank Rakyat Indonesia', no_pks: '27/9/Sb/P/B | B.1196.KC-IX/LYI/03/2025', tgl_pks: '19 Maret 2025', peserta: 'Bank Jatim, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Woori Saudara', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Kalimantan Barat', kt: 'Ketapang', jml_perbankan: 11, pengelola: 'Bank Kalbar', no_pks: '27/9/Ptk/P/B  -KC.KTP/UMM/PKS-013/2025', tgl_pks: '13 Juli 2025', peserta: 'Bank Kalbar, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Maybank, Bank Mega, Bank Panin, Bank Sinarmas', plafon: 250000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Barat', kt: 'Putussibau', jml_perbankan: 5, pengelola: 'Bank Kalbar', no_pks: '27/8/Ptk/P/B  -KC.PTS-UMM/PKS-002/2025', tgl_pks: '7 Mei 2025', peserta: 'Bank Kalbar, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Mandiri', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Barat', kt: 'Singkawang', jml_perbankan: 13, pengelola: 'Bank Kalbar', no_pks: '26/24/Ptk/P/B  -KC.SKW-UMM/PKS-08/2024', tgl_pks: '31 Oktober 2024', peserta: 'Bank Kalbar, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank CIMB Niaga, Bank Danamon, Bank Mandiri, Bank Maybank, Bank Mega, Bank Panin, Bank Sinarmas', plafon: 250000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Barat', kt: 'Sintang', jml_perbankan: 13, pengelola: 'Bank Kalbar', no_pks: '26/29/Ptk/P/B  -KC.STG-KT/PKS-19/2024', tgl_pks: '20 Desember 2024', peserta: 'Bank Kalbar, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Maybank, Bank Mega, Bank Panin, Bank Sinarmas, Bank SMBC Indonesia', plafon: 350000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Selatan', kt: 'Batulicin', jml_perbankan: 11, pengelola: 'Bank Kalsel', no_pks: '27/021/BJM/P/B | 319/PKS/TRS/BKS/2025', tgl_pks: '25 Agustus 2025', peserta: 'Bank Kalsel, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Mega, Bank Panin, Bank Sinarmas', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Selatan', kt: 'Tanjung', jml_perbankan: 7, pengelola: 'Bank Kalsel', no_pks: '27/022/BJM/P/B | 165/PKS/TRS/BKS/2025', tgl_pks: '26 Agustus 2025', peserta: 'Bank Kalsel, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Kalimantan Tengah', kt: 'Buntok', jml_perbankan: 5, pengelola: 'Bank Kalteng', no_pks: '27/15PLK/PKS/2025 - KC1.3032/PKS-0148/III.25', tgl_pks: '11 Maret 2025', peserta: 'Bank Kalteng, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri, Bank SMBC Indonesia', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Tengah', kt: 'Muara Teweh', jml_perbankan: 5, pengelola: 'Bank Kalteng', no_pks: '27/20/PLK/PKS2023 - KCMTW.3031/PKS-0426/III.25', tgl_pks: '11 April 2025', peserta: 'Bank Kalteng, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri, Bank Mega', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Tengah', kt: 'Nanga Bulik', jml_perbankan: 4, pengelola: 'Bank Kalteng', no_pks: '27/79/PLK/PKS/2025 - KCNGB.402?PKS-0420/X.25', tgl_pks: '6 Oktober 2025', peserta: 'Bank Kalteng, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Tengah', kt: 'Pangkalan Bun', jml_perbankan: 11, pengelola: 'Bank Kalteng', no_pks: '27/45/PLK/PKS/2023 - KCPBN.203/PKS-007/V.25', tgl_pks: '12 Mei 2025', peserta: 'Bank Kalteng, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Maybank, Bank Mega, Bank Sinarmas', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Tengah', kt: 'Sampit', jml_perbankan: 10, pengelola: 'Bank Rakyat Indonesia', no_pks: '26/38/PLK/PKS/2024 - B.5015-KC-X/OPS/12/2024', tgl_pks: '12 Desember 2024', peserta: 'Bank Kalteng, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Mandiri, Bank Maybank, Bank Mega, Bank Sinarmas', plafon: 300000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Timur', kt: 'Sangatta', jml_perbankan: 9, pengelola: 'Bank Kaltimtara', no_pks: '26/49/SMR/P/B dan No.038/PKS/BPD-SGT/X/2024', tgl_pks: '14 Oktober 2024', peserta: 'Bank Kaltimtara, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Kalimantan Timur', kt: 'Sendawar', jml_perbankan: 6, pengelola: 'Bank Kaltimtara', no_pks: 'No.26/50/SMR/P/B dan No.1559/B-4/PKS/BPD-SDW/X/2024', tgl_pks: '14 Oktober 2024', peserta: 'Bank Kaltimtara, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Mandiri, Bank Sinarmas', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Kalimantan Timur', kt: 'Tanjung Redeb', jml_perbankan: 13, pengelola: 'Bank Kaltimtara', no_pks: '26/48/SMR/P/B dan No.2836/PKS/BPD-TJR/X/2024', tgl_pks: '14 Oktober 2024', peserta: 'Bank Kaltimtara, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat, Bank Sinarmas, Bank Kaltimtara Syariah', plafon: 150000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Kalimantan Utara', kt: 'Malinau', jml_perbankan: 4, pengelola: 'Bank Kaltimtara', no_pks: 'No.27/26/Trk/P/B | No.260/B-4/BPD-MLN/IX/2025', tgl_pks: '19 September 2025', peserta: 'Bank Kaltimtara, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri', plafon: 100000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Kalimantan Utara', kt: 'Nunukan', jml_perbankan: 5, pengelola: 'Bank Kaltimtara', no_pks: 'No.26/16/Trk/P/B | 1927/PRJ/BPD-NNK/VIII/2024', tgl_pks: '27 Agustus 2024', peserta: 'Bank Kaltimtara, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Mandiri', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kalimantan Utara', kt: 'Tanjung Selor', jml_perbankan: 7, pengelola: 'Bank Kaltimtara', no_pks: 'No.26/20/Trk/P/B | No. 1450/B-4/BPD-TJS/XII/2024', tgl_pks: '3 Desember 2024', peserta: 'Bank Kaltimtara, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kep. Bangka Belitung', kt: 'Tanjungpandan', jml_perbankan: 10, pengelola: 'Bank Mandiri', no_pks: '27/5/PkP/P/B | RO2.Br.TPN/PKS. 176/2025', tgl_pks: '9 Mei 2025', peserta: 'Bank Sumsel Babel, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Muamalat, Bank Panin, Bank Sinarmas', plafon: 350000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kep. Riau', kt: 'Natuna', jml_perbankan: 5, pengelola: 'Bank Kepri Syariah (BRKS)', no_pks: '27/13/BTM/P/B | 032/PKS/KASTIP-BI/117/2025', tgl_pks: '05 Juni 2025', peserta: 'Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Mandiri, Bank Riau Kepri Syariah (BRKS)', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Kep. Riau', kt: 'Tanjung Balai Karimun', jml_perbankan: 6, pengelola: 'Bank Negara Indonesia', no_pks: '27/11/BTM/P/B | TBK/07/0759/R', tgl_pks: '21 Mei 2025', peserta: 'Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Mandiri, Bank Riau Kepri Syariah', plafon: 150000000000, pct_kepesertaan: '75' },
+  { kpw: 'Prov. Kep. Riau', kt: 'Tanjungpinang', jml_perbankan: 16, pengelola: 'Bank Mandiri', no_pks: '27/14/BTM/P/B | R.01.Br.TPG/0973/2025', tgl_pks: '20 Juni 2025', peserta: 'Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Bukopin, Bank CCBI, Bank CIMB Niaga, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat, Bank OCBC, Bank Sinarmas, Bank SMBC Indonesia, Bank Riau Kepri Syariah', plafon: 200000000000, pct_kepesertaan: '88.8' },
+  { kpw: 'Prov. Lampung', kt: 'Liwa', jml_perbankan: 4, pengelola: 'Bank Rakyat Indonesia', no_pks: '27/8/PKS/Bdl/2025 Nomor B.425-KC-XIX/OPS/02/2025', tgl_pks: '21 Februari 2025', peserta: 'Bank Lampung, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '' },
+  { kpw: 'Lhokseumawe', kt: 'Langsa', jml_perbankan: 5, pengelola: 'Bank Syariah Indonesia', no_pks: '27/15/Lsm/P/B/ Nomor 05/2025-3-8329', tgl_pks: '20 Oktober 2025', peserta: 'Bank Aceh Syariah, Bank Muamalat, Bank Danamon Syariah, Bank BTN Syariah, Bank Syariah Indonesia', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Lhokseumawe', kt: 'Takengon', jml_perbankan: 3, pengelola: 'Bank Syariah Indonesia', no_pks: '26/19/Lsm/P/B Nomor 005/0012-3/9054', tgl_pks: '3 Januari 2025', peserta: 'Bank Aceh Syariah, Bank Syariah Indonesia, Bank BTN Syariah', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Maluku', kt: 'Fakfak', jml_perbankan: 5, pengelola: 'Bank Papua', no_pks: '27/18/Ab/PKS // 18/PKS-BPD/10/2025', tgl_pks: '4 Oktober 2025', peserta: 'Bank Papua, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri, Bank Mega', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Maluku', kt: 'Langgur', jml_perbankan: 5, pengelola: 'Bank Rakyat Indonesia', no_pks: '26/38A/Ab/PKS  -B.1887-KC/XIII/OPS/10/2024', tgl_pks: '8 Oktober 2024', peserta: 'Bank Maluku Malut, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri, Bank Artha Graha', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Maluku', kt: 'Namlea', jml_perbankan: 4, pengelola: 'Bank Maluku Malut', no_pks: '27/19/Ab/PKS // NML/03/163/X/2025', tgl_pks: '23 Oktober 2025', peserta: 'Bank Maluku Malut, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri', plafon: 140000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Maluku', kt: 'Saumlaki', jml_perbankan: 4, pengelola: 'Bank Maluku Malut', no_pks: '27/22/Ab/PKS // SML/03/843/2025', tgl_pks: '20 November 2025', peserta: 'Bank Maluku Malut, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Mandiri', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Maluku Utara', kt: 'Labuha', jml_perbankan: 6, pengelola: 'Bank Maluku Malut', no_pks: 'No. 27/5/Tt/SPK/B dan No.LBH/03/14/II/2025', tgl_pks: '7 Februari 2025', peserta: 'Bank Maluku Malut, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Mandiri, Bank Muamalat', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Maluku Utara', kt: 'Tobelo', jml_perbankan: 6, pengelola: 'Bank Rakyat Indonesia', no_pks: 'No.27/9/Tt/SPK/B dan No.B.500/KC-XII/OPS/05/2025', tgl_pks: '19 Mei 2025', peserta: 'Bank Maluku Malut, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '85.7' },
+  { kpw: 'Prov. NTB', kt: 'Bima', jml_perbankan: 9, pengelola: 'Bank NTB Syariah', no_pks: '27/12/Mtr/P/B  -SPJ/0126/38/30/2025', tgl_pks: '26 Mei 2025', peserta: 'Bank NTB Syariah, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Sinarmas', plafon: 225000000000, pct_kepesertaan: '82' },
+  { kpw: 'Prov. NTB', kt: 'Sumbawa', jml_perbankan: 9, pengelola: 'Bank NTB Syariah', no_pks: '27/5/Mtr/P/B  -SPJ/009/38/30/2025', tgl_pks: '3 Maret 2025', peserta: 'Bank NTB Syariah, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Mega', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Pematang Siantar', kt: 'Rantauprapat', jml_perbankan: 14, pengelola: 'Bank Mandiri', no_pks: '27/11/PMS/P/B dan Nomor : RO1.Br.RPA/PKS.363/2025', tgl_pks: '10 Maret 2025', peserta: 'Bank Sumut, Bank Central Asia, Bank Negara Indonesia, Bank Rakyat Indonesia, Bank Syariah Indonesia, Bank Tabungan Negara, Bank CIMB Niaga, Bank Danamon, Bank Mandiri, Bank Maybank, Bank Mega, Bank Mestika Dharma, Bank Panin, Bank Sinarmas', plafon: 300000000000, pct_kepesertaan: '93.3' },
+  { kpw: 'Prov. NTT', kt: 'Alor / Kalabahi', jml_perbankan: 4, pengelola: 'Bank NTT', no_pks: '', tgl_pks: '', peserta: 'Bank NTT, BNI, BRI, Bank Mandiri', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. NTT', kt: 'Atambua', jml_perbankan: 7, pengelola: 'Bank NTT', no_pks: '26/38/Kpa/P/B  -185/BNTT.KC-1003/X/2024', tgl_pks: '2 Desember 2024', peserta: 'Bank NTT, BCA, BNI, BRI, Bank Danamon, Bank Mandiri, Bank KB', plafon: 200000000000, pct_kepesertaan: '87.5' },
+  { kpw: 'Prov. NTT', kt: 'Ende', jml_perbankan: 6, pengelola: 'Bank NTT', no_pks: '27/28/Kpa/P/B  -047/CE/VI/2025', tgl_pks: '1 Juli 2025', peserta: 'Bank NTT, BNI, BRI, Bank Danamon, Bank Mandiri, Bank Sinarmas', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. NTT', kt: 'Labuan Bajo', jml_perbankan: 7, pengelola: 'Bank NTT', no_pks: '27/25/Kpa/P/B  -103/BNTT.KC-1025/VI/2025', tgl_pks: '2 Juli 2025', peserta: 'Bank NTT, BCA, BNI, BRI, BSI, Bank Mandiri, Bank Nobu', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. NTT', kt: 'Lewoleba', jml_perbankan: 3, pengelola: 'Bank NTT', no_pks: '26/37/Kpa/P/B  -009/PKS/BNTT-CL/X/2024', tgl_pks: '2 Desember 2024', peserta: 'Bank NTT, BNI, BRI', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. NTT', kt: 'Maumere', jml_perbankan: 8, pengelola: 'Bank NTT', no_pks: '27/26/Kpa/P/B  -03/BNTT-002/PKS/VI/2025', tgl_pks: '28 Juni 2025', peserta: 'Bank NTT, BCA, BNI, BRI, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Sinarmas', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. NTT', kt: 'Ruteng', jml_perbankan: 6, pengelola: 'Bank NTT', no_pks: '27/24/Kpa/P/B  -006/BNTT-006/PKS-KASTIP/VI/2025', tgl_pks: '1 Juli 2025', peserta: 'Bank NTT, BCA, BNI, BRI, Bank Danamon, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. NTT', kt: 'Waikabubak', jml_perbankan: 4, pengelola: 'Bank NTT', no_pks: '27/27/Kpa/P/B  -241/CWB/VI/2025', tgl_pks: '21 Juni 2025', peserta: 'Bank NTT, BNI, BRI, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. NTT', kt: 'Waingapu', jml_perbankan: 5, pengelola: 'BRI', no_pks: '26/41/Kpa/P/B  -B.4070/KC-XI/OPS/11/2024', tgl_pks: '2 Desember 2024', peserta: 'Bank NTT, BCA, BNI, BRI, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua', kt: 'Biak', jml_perbankan: 5, pengelola: 'Mandiri', no_pks: '27/24/Jap/P/B JRB.12.Br.BAK/PKS.005/2025', tgl_pks: '3 Agustus 2025', peserta: 'Bank Papua, BNI, BRI, Bank Danamon, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua', kt: 'Merauke', jml_perbankan: 10, pengelola: 'BPD Papua', no_pks: '27/25/JAP/P/B 022/PKS-BPD/VII/2025', tgl_pks: '3 Agustus 2025', peserta: 'Bank Papua, BCA, BNI, BRI, BSI, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat, Bank Sinarmas', plafon: 350000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua', kt: 'Nabire', jml_perbankan: 7, pengelola: 'BPD Papua', no_pks: '27/29/Jap/P/B 032/PKS-BPD/VII/NBR/IX/2025', tgl_pks: '16 Sep 2025', peserta: 'Bank Papua, BNI, BRI, Bank Danamon, Bank Mandiri, Bank Mega, Bank Sinarmas', plafon: 325000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua', kt: 'Serui', jml_perbankan: 4, pengelola: 'BRI', no_pks: '27/21/JAP/P/B B.690-BO/SER/OPS/05/2025', tgl_pks: '16 Juni 2025', peserta: 'Bank Papua, BNI, BRI, Bank Mandiri', plafon: 125000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua', kt: 'Sorong', jml_perbankan: 13, pengelola: 'Mandiri', no_pks: '27/24/Jap/P/B JRB.12.Br.BAK/PKS.005/2025', tgl_pks: '3 Agustus 2025', peserta: 'Bank Papua, BCA, BNI, BRI, BSI, Bank Bukopin, Bank Danamon, Bank Mandiri, Bank Maybank, Bank Mega, Bank Muamalat, Bank Sahabat Sampoerna, Bank Sinarmas', plafon: 300000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua', kt: 'Timika', jml_perbankan: 11, pengelola: 'Mandiri', no_pks: '27/25/Jap/P/B R12.Br.TMK/PKS.5/2025', tgl_pks: '3 Agustus 2025', peserta: 'Bank Papua, BCA, BNI, BRI, Bank Tabungan Negara, Bank CIMB Niaga, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat, Bank Panin', plafon: 350000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua', kt: 'Wamena', jml_perbankan: 4, pengelola: 'BPD Papua', no_pks: '26/47/Jap/P/B 15/PKS-BPD/WMN/XII/2024', tgl_pks: '18 Desember 2024', peserta: 'Bank Papua, BNI, BRI, Bank Maybank', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua Barat', kt: 'Bintuni', jml_perbankan: 4, pengelola: 'BPD Papua', no_pks: '26/25/Mw/P/B 14/PKS-PBD.BNT/XII/2024', tgl_pks: '2 Desember 2024', peserta: 'BNI, BRI, Bank Mandiri, Bank Papua', plafon: 50000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Papua Barat', kt: 'Sorong Selatan', jml_perbankan: 4, pengelola: 'BNI', no_pks: '27/7/Mw/P/B  -SOR/5.1/0012/2025', tgl_pks: '19 November 2025', peserta: 'BNI, Bank Papua, BRI, Bank Mandiri', plafon: 50000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Riau', kt: 'Pasir Pengaraian', jml_perbankan: 4, pengelola: 'Bank Riau Kepri Syariah', no_pks: '27/4/Pbr/PK/B 009/PKS/BRKS-PPN/2025', tgl_pks: '20 Nov 2025 sd 30 Jun 2026', peserta: 'BNI, BRI, Bank Mandiri, BRKS', plafon: 150000000000, pct_kepesertaan: '67' },
+  { kpw: 'Prov. Riau', kt: 'Rengat', jml_perbankan: 6, pengelola: 'BNI', no_pks: '26/14/Pbr/PK/B dan RGT/7/023', tgl_pks: '25 November 2024 sd 30 Juni 2026', peserta: 'Bank Riau Kepri, BRI, BSI, Bank Mandiri, Bank Panin', plafon: 300000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sulawesi Barat', kt: 'Polewali Mandar', jml_perbankan: 6, pengelola: 'Bank Sulselbar', no_pks: '27/02/Mju/P/B | 005/PKS-BSSB/PM/II/2025', tgl_pks: '18 Februari 2025', peserta: 'Bank Sulselbar, BNI, BRI, BSI, Bank Tabungan Negara, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '46.15' },
+  { kpw: 'Prov. Sulawesi Selatan', kt: 'Bone', jml_perbankan: 15, pengelola: 'Bank Sulselbar', no_pks: '27/5/PKS/Mks/2025  -04/PKS-BSSB/III/2025', tgl_pks: '31 Maret 2025', peserta: 'Bank Sulselbar, BCA, BNI, BRI, BSI, Bank Tabungan Negara, Bank Danamon, Bank Mandiri, Bank Muamalat, Bank Panin, Bank Sinarmas', plafon: 200000000000, pct_kepesertaan: '78' },
+  { kpw: 'Prov. Sulawesi Selatan', kt: 'Bulukumba', jml_perbankan: 8, pengelola: 'Bank Sulselbar', no_pks: '26/17/Mks/2024  - SR/020/PKS/BSSB/BLK/XI/2024', tgl_pks: '14 November 2024', peserta: 'Bank Sulselbar, BNI, BRI, BSI, Bank Tabungan Negara, Bank Danamon, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '87,5' },
+  { kpw: 'Prov. Sulawesi Selatan', kt: 'Malili', jml_perbankan: 6, pengelola: 'Bank Sulselbar', no_pks: '26/19/PKS/MKS/2024  -593/PKS-BSSB/MLL/XII/2024', tgl_pks: '5 Desember 2024', peserta: 'Bank Sulselbar, BNI, BRI, BSI, Bank Tabungan Negara, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sulawesi Selatan', kt: 'Palopo', jml_perbankan: 15, pengelola: 'Bank Sulselbar', no_pks: '27/8/PKS/Mks/2025   -10/PKS-BSSB/PL/VIII/2025', tgl_pks: '31 Maret 2026', peserta: 'Bank Sumut, Bank Sumut Syariah, BNI, BRI, BSI, BTN, Bank Danamon, Bank Mandiri, Bank Mestika Dharma, Bank Sinarmas, Bank SMBC Indonesia', plafon: 250000000000, pct_kepesertaan: '94' },
+  { kpw: 'Prov. Sulawesi Selatan', kt: 'Parepare', jml_perbankan: 13, pengelola: 'Bank Sulselbar', no_pks: '26/22/PKS/Mks/2024  -SR/341/R/DCS/XII/2024', tgl_pks: '26 Desember 2025', peserta: 'Bank Sulselbar, BCA, BNI, BRI, BSI, BTN, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat, Bank Panin, Bank Sinarmas', plafon: 200000000000, pct_kepesertaan: '92,3' },
+  { kpw: 'Prov. Sulawesi Tengah', kt: 'Bungku / Morowali', jml_perbankan: 7, pengelola: 'Bank Sulteng', no_pks: '27/56/Pal/SPK/B  -300/BPD-ST/C-BKU/PKS/XVII/2025', tgl_pks: '25 Desember 2025', peserta: 'Bank Sulteng, BCA, BNI, BRI, BSI, BTN, Bank Mandiri', plafon: 250000000000, pct_kepesertaan: '33.3' },
+  { kpw: 'Prov. Sulawesi Tengah', kt: 'Luwuk', jml_perbankan: 12, pengelola: 'BNI', no_pks: '26/44/Pal/SPK/B  -LWK/0879/KT', tgl_pks: '11 Oktober 2024', peserta: 'Bank Sulteng, BCA, BNI, BRI, BSI, Bank Danamon, Bank Mandiri, Bank Mega, Bank Muamalat, Bank Panin, Bank Sinarmas, Bank SMBC Indonesia', plafon: 200000000000, pct_kepesertaan: '12.58' },
+  { kpw: 'Prov. Sulawesi Tengah', kt: 'Pasangkayu', jml_perbankan: 4, pengelola: 'Bank Sulselbar', no_pks: '27/53/Pal/SPK/B  -SR/391/R/KASTIPBI/PKS/XI/2025', tgl_pks: '7 Nov 2025', peserta: 'Bank Sulselbar, BNI, BRI, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sulawesi Tengah', kt: 'Poso', jml_perbankan: 6, pengelola: 'BRI', no_pks: '27/26/Pal/SPK/B  -B.303/KC-XII/OPS/06/2025', tgl_pks: '4 Juni 2025', peserta: 'Bank Sulteng, BNI, BRI, BSI, BTN, Bank Mandiri', plafon: 125000000000, pct_kepesertaan: '38' },
+  { kpw: 'Prov. Sulawesi Tengah', kt: 'Tolitoli', jml_perbankan: 6, pengelola: 'Mandiri', no_pks: '27/34/PAL/SPK/B  -NRF.R10.Br.TTL/PKS.001/2025', tgl_pks: '21 Juli 2025', peserta: 'Bank Sulteng, BNI, BRI, BSI, Bank Danamon, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sulawesi Tenggara', kt: 'Baubau', jml_perbankan: 11, pengelola: 'BNI', no_pks: '26/22/Kdi/P/B  -Bau/1/0727', tgl_pks: '28 November 2024', peserta: 'BNI, Mandiri, BRI, BSI, BTN, Muamalat, Bank Sultra, Sinarmas, Panin, Danamon, BCA', plafon: 250000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Sulawesi Tenggara', kt: 'Kolaka', jml_perbankan: 9, pengelola: 'BRI', no_pks: '26/19/KDI/PKS/B  -6348-KC-XIII/OPS/12/2024', tgl_pks: '20 Desember 2024', peserta: 'Bank Sultara, BRI, BNI, BTN, Mandiri, Muamalat, Panin, Sinarmas, BNI Syariah', plafon: 200000000000, pct_kepesertaan: '90' },
+  { kpw: 'Prov. Sulawesi Utara', kt: 'Melonguane', jml_perbankan: 2, pengelola: 'Bank Sulutgo', no_pks: '27/19/Mo/P/B  -002/PKS/BSG-MLNG/XI/2025', tgl_pks: '13 November 2025', peserta: 'Bank Sulutgo, BRI', plafon: 70000000000, pct_kepesertaan: '' },
+  { kpw: 'Prov. Sulawesi Utara', kt: 'Siau / KepSitaro', jml_perbankan: 4, pengelola: 'Bank Sulutgo', no_pks: '27/18/Mo/P/B  -006/A/PKS/SU/XI/2025', tgl_pks: '13 November 2025', peserta: 'Bank Sulutgo, BNI, BRI, Bank Mandiri', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sulawesi Utara', kt: 'Tahuna', jml_perbankan: 4, pengelola: 'Mandiri', no_pks: '27/15/Mo/P/B  -R10.Br.THN/PKS.001/2025', tgl_pks: '10 Juli 2025', peserta: 'Bank Sulutgo, BNI, BRI, Bank Mandiri', plafon: 100000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sumatera Barat', kt: 'Sungai Penuh', jml_perbankan: 5, pengelola: 'BNI', no_pks: '27/3/Pdg/P/B  -SPN/4/144/R', tgl_pks: '1 April 2025', peserta: 'Bank Jambi, BNI, BRI, BSI, Bank Mandiri', plafon: 150000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sumatera Selatan', kt: 'Baturaja', jml_perbankan: 12, pengelola: 'BRI', no_pks: '27/7/PKS/BNA/B -005/361-3/9047', tgl_pks: '4 Januari 2025', peserta: '', plafon: 250000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sumatera Selatan', kt: 'Musi Banyuasin', jml_perbankan: 5, pengelola: 'Bank Sumsel Babel', no_pks: '27/4/Pg/P/B  -175/SLL/3/B/2025', tgl_pks: '14 Oktober 2025', peserta: 'Bank Sumsel Babel, BCA, BNI, BRI, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Prov. Sumatera Utara', kt: 'Kabanjahe', jml_perbankan: 6, pengelola: 'BRI', no_pks: '27/2/Mdn/PKS/B–B.02/OPS/05/2025', tgl_pks: '5 Mei 2025', peserta: 'Bank Sumut, BCA, BNI, BRI, BSI, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '66.7' },
+  { kpw: 'Prov. Sumatera Utara', kt: 'Subulussalam', jml_perbankan: 2, pengelola: 'Bank Aceh Syariah', no_pks: 'No.27/4/Mdn/PKS/B - No.013/092.02/PKS/IX/2025', tgl_pks: '3 Oktober 2025', peserta: 'Bank Aceh Syariah, BSI', plafon: 200000000000, pct_kepesertaan: '100' },
+  { kpw: 'Sibolga', kt: 'Balige', jml_perbankan: 5, pengelola: 'BNI', no_pks: '27/7/SBG/P/B | BLG/3/128', tgl_pks: '1 April 2025', peserta: 'Bank Sumut, BNI, BRI, BTN, Bank Mandiri', plafon: 200000000000, pct_kepesertaan: '' },
+  { kpw: 'Sibolga', kt: 'Gunung Sitoli', jml_perbankan: 6, pengelola: 'BNI', no_pks: '27/2/SBG/P/B | GST/052/R', tgl_pks: '7 Februari 2025', peserta: 'Bank Sumut, BNI, BRI, Bank Danamon, Bank Mandiri, Bank SMBC Indonesia', plafon: 250000000000, pct_kepesertaan: '100' },
+  { kpw: 'Sibolga', kt: 'Padangsidimpuan', jml_perbankan: 10, pengelola: 'BRI', no_pks: '27/14/SBG/P/B | B.448-BOPSP/XI/2025', tgl_pks: '12 Januari 2025', peserta: 'Bank Sumut, Bank Sumut Syariah, BNI, BRI, BSI, BTN, Bank Danamon, Bank Mandiri, Bank Mestika Dharma, Bank Sinarmas, BRI', plafon: 250000000000, pct_kepesertaan: '95' },
+];
+
+
+function initializePeriodTemplate(tahun, triwulan) {
+  if(!tahun || triwulan === 'ALL') return;
+  if(!DATA_STORE[tahun]) DATA_STORE[tahun] = {};
+  if(!DATA_STORE[tahun][triwulan]) DATA_STORE[tahun][triwulan] = {};
+  
+  let addedAny = false;
+  TEMPLATE_KASTIPS.forEach(item => {
+      let slotId = item.kpw + '_' + item.kt;
+      if(!DATA_STORE[tahun][triwulan][slotId]) {
+          let record = {
+              kpw: item.kpw,
+              kt: item.kt,
+              jml_perbankan: item.jml_perbankan || 0,
+              pengelola: item.pengelola || '',
+              no_pks: item.no_pks || '',
+              tgl_pks: item.tgl_pks || '',
+              peserta: item.peserta || '',
+              plafon: item.plafon || 0,
+              pct_kepesertaan: item.pct_kepesertaan || ''
+          };
+          
+          DATA_SCHEMA.forEach(f => {
+              if (record[f.id] === undefined) {
+                  if(f.type === 'number' || f.type === 'currency' || f.type === 'percent') {
+                      record[f.id] = 0;
+                  } else {
+                      record[f.id] = '';
+                  }
+              }
+          });
+          
+          computeData(record);
+          DATA_STORE[tahun][triwulan][slotId] = record;
+          addedAny = true;
+      }
+  });
+  if (addedAny) {
+      saveData();
+  }
+}
+
+function updateTahunDropdownList() {
+  const selector = el('tahunSelector');
+  if (!selector) return;
+  
+  let currentVal = selector.value || currentTahun;
+  
+  let years = new Set(['2025', '2026', '2027', '2028', '2029', '2030']);
+  Object.keys(DATA_STORE).forEach(y => {
+      if (/^\d{4}$/.test(y)) {
+          years.add(y);
+      }
+  });
+  
+  let sortedYears = Array.from(years).sort((a, b) => parseInt(a) - parseInt(b));
+  
+  selector.innerHTML = '';
+  sortedYears.forEach(y => {
+      selector.options.add(new Option('Tahun ' + y, y));
+  });
+  
+  selector.options.add(new Option('-Tambah Tahun...', 'ADD_NEW'));
+  
+  if (currentVal && Array.from(selector.options).some(o => o.value === currentVal)) {
+      selector.value = currentVal;
+  }
+}
+
 let DATA_STORE = {}; 
 let currentTahun = '2025', currentTriwulan = 'Q1', currentKpw = "", currentKt = "";
 let chartArusKas = null, chartBiaya = null, chartSaldo = null; 
@@ -1199,12 +1360,42 @@ const fmtNet = n => { if(n===null||n===undefined||n==='') return '-'; const num=
 function showToast(msg) { const t = el('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 
 function changePeriode() {
+  if (el('tahunSelector').value === 'ADD_NEW') {
+      let newVal = prompt("Masukkan Tahun Baru (contoh: 2031):");
+      if (newVal && /^\d{4}$/.test(newVal.trim())) {
+          let newYear = newVal.trim();
+          currentTahun = newYear;
+          if (!DATA_STORE[newYear]) DATA_STORE[newYear] = {};
+          
+          updateTahunDropdownList();
+          el('tahunSelector').value = newYear;
+          
+          currentTriwulan = el('triwulanSelector').value;
+          if (currentTriwulan === 'ALL') el('headerLabel').innerHTML = `ðŸ—“ï¸ PERIODE: TAHUN ${currentTahun} - REKAPITULASI PENUH`;
+          else el('headerLabel').innerHTML = `ðŸ—“ï¸ PERIODE: TAHUN ${currentTahun} - TRIWULAN ${currentTriwulan.replace('Q', '')}`;
+          
+          if (currentTriwulan !== 'ALL' && !DATA_STORE[currentTahun][currentTriwulan]) {
+              DATA_STORE[currentTahun][currentTriwulan] = {};
+              initializePeriodTemplate(currentTahun, currentTriwulan);
+          }
+          initSelectors(); renderAll(); saveUIState();
+          showToast(`ðŸ—“ï¸ Tahun ${newYear} berhasil ditambahkan!`);
+      } else {
+          el('tahunSelector').value = currentTahun;
+      }
+      return;
+  }
+  
   currentTahun = el('tahunSelector').value; currentTriwulan = el('triwulanSelector').value;
   if(currentTriwulan === 'ALL') el('headerLabel').innerHTML = `🗓️ PERIODE: TAHUN ${currentTahun} - REKAPITULASI PENUH`;
   else el('headerLabel').innerHTML = `🗓️ PERIODE: TAHUN ${currentTahun} - TRIWULAN ${currentTriwulan.replace('Q', '')}`;
   
   if(!DATA_STORE[currentTahun]) DATA_STORE[currentTahun] = {};
   if(currentTriwulan !== 'ALL' && !DATA_STORE[currentTahun][currentTriwulan]) DATA_STORE[currentTahun][currentTriwulan] = {};
+  
+  if(currentTriwulan !== 'ALL') {
+      initializePeriodTemplate(currentTahun, currentTriwulan);
+  }
   
   initSelectors(); renderAll(); saveUIState();
 }
@@ -1398,9 +1589,9 @@ function initGeoMap(D) {
     if(D && D.kpw) {
         let kName = (D.kt || "").toUpperCase().trim(); let kpwName = (D.kpw || "").toUpperCase().trim();
         let coords = MAP_COORDS[kName] || MAP_COORDS[kpwName] || MAP_COORDS[kpwName.replace('PROVINSI ', '')] || [-6.2088, 106.8456];
-        let color = D.status_net_tw === 'Outflow' ? '#b91c1c' : '#15803d';
-        
-        let mainMarker = L.circleMarker(coords, { color: color, fillColor: color, fillOpacity: 0.8, radius: 12 }).addTo(geoMap);
+        let color = D.status_net_tw === 'Outflow' ? '#b91c1c' : (D.status_net_tw === 'Inflow' ? '#15803d' : '#ffffff');
+        let strokeColor = color === '#ffffff' ? '#475569' : color;
+        let mainMarker = L.circleMarker(coords, { color: strokeColor, fillColor: color, fillOpacity: 0.8, radius: 12, weight: 2 }).addTo(geoMap);
         mainMarker.bindPopup(`<b>KPwDN: ${D.kpw}</b><br>Kas Titipan: ${D.kt}<br>Netflow: ${fmt(D.nom_net_tw)}`); mapMarkers.push(mainMarker);
         
         let bounds = [coords];
@@ -1477,8 +1668,9 @@ function toggleMapAll() {
         let kName = (D.kt || "").toUpperCase().trim(); let kpwName = (D.kpw || "").toUpperCase().trim();
         let coords = MAP_COORDS[kName] || MAP_COORDS[kpwName] || MAP_COORDS[kpwName.replace('PROVINSI ', '')];
         if(coords) {
-            let color = D.status_net_tw === 'Outflow' ? '#b91c1c' : '#15803d';
-            let m = L.circleMarker(coords, { color: color, fillColor: color, fillOpacity: 0.8, radius: 8 }).addTo(geoMap);
+            let color = D.status_net_tw === 'Outflow' ? '#b91c1c' : (D.status_net_tw === 'Inflow' ? '#15803d' : '#ffffff');
+            let strokeColor = color === '#ffffff' ? '#475569' : color;
+            let m = L.circleMarker(coords, { color: strokeColor, fillColor: color, fillOpacity: 0.8, radius: 8, weight: 2 }).addTo(geoMap);
             m.bindPopup(`<b>KPwDN: ${D.kpw}</b><br>Kas Titipan: ${D.kt}<br>Netflow: ${fmt(D.nom_net_tw)}`); 
             mapMarkers.push(m); bounds.push(coords);
         }
@@ -2055,8 +2247,8 @@ function renderAll() {
   setTxt('kv-no-pks', D.no_pks || (isNas ? 'Terdata' : '-')); setTxt('kv-tgl-pks', D.tgl_pks || (isNas ? 'Terdata' : '-')); setTxt('kv-peserta', D.peserta || (isNas ? 'Terdata' : '-'));
   let cBanks = D.peserta && D.peserta !== '-' && D.peserta !== 'Terdata' ? D.peserta.split(',').length : 0;
   setTxt('kv-jml-bank', D.jml_perbankan || cBanks || '0'); setTxt('kv-pct-peserta', D.pct_kepesertaan ? D.pct_kepesertaan + (D.pct_kepesertaan.toString().includes('%') ? '' : '%') : '-');
-  setTxt('kv-setor-nama', D.setor_nama || (isNas ? 'Terdata' : '-')); setTxt('kv-setor-nom', fmt(D.setor_nom));
-  setTxt('kv-tarik-nama', D.tarik_nama || (isNas ? 'Terdata' : '-')); setTxt('kv-tarik-nom', fmt(D.tarik_nom));
+  setTxt('kv-setor-nama', isNas ? 'Terdata' : (D.setor_nama || '-')); setTxt('kv-setor-nom', fmt(D.setor_nom));
+  setTxt('kv-tarik-nama', isNas ? 'Terdata' : (D.tarik_nama || '-')); setTxt('kv-tarik-nom', fmt(D.tarik_nom));
   setTxt('kv-tot-terbesar', fmt((D.setor_nom || 0) + (D.tarik_nom || 0)));
   setTxt('kv-temuan', D.lap_temuan || '0'); setTxt('kv-telat', D.lap_telat || (isNas ? 'Terdata' : '-'));
   
@@ -2679,3 +2871,5 @@ function saveRegionSettings() {
 </div>
 </body>
 </html>
+
+
