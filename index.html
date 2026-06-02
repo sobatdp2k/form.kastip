@@ -63,22 +63,22 @@
   /* ENGINE NATIVE PRINT KHUSUS (TOMBOL CETAK/SAVE AS PDF)      */
   /* ========================================================== */
   @media print {
-      @page { size: A4 landscape; margin: 10mm; }
-      body { background: #ffffff !important; color: #000000 !important; }
-      .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; display: block !important; }
+      @page { size: A4 portrait; margin: 10mm; }
+      body { background: #ffffff !important; color: #000000 !important; overflow: visible !important; height: auto !important; min-height: auto !important; }
+      .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; display: block !important; overflow: visible !important; }
       
-      header, .sticky-toolbar, #tableContainer, #editPanel, .toast, #loginScreen { display: none !important; }
+      header, .sticky-toolbar, #tableContainer, #editPanel, .toast, #loginScreen, #footerBlock { display: none !important; }
       
       #printableArea { background: transparent !important; display: block !important; }
       
       #kopSuratBlock { display: block !important; text-align: center; margin-bottom: 20px; }
-      #ttdBlock { display: flex !important; justify-content: space-around; margin-top: 40px; page-break-inside: avoid; }
+      #ttdBlock { display: flex !important; justify-content: space-around; margin-top: 40px; break-inside: avoid; page-break-inside: avoid; }
       
-      .kpi-grid { display: flex !important; flex-wrap: wrap !important; gap: 10px !important; margin-bottom: 20px !important; }
-      .kpi-card { width: calc(50% - 5px) !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; padding: 16px !important; break-inside: avoid; }
+      .kpi-grid { display: block !important; margin-bottom: 20px !important; text-align: space-between; }
+      .kpi-card { display: inline-block !important; width: calc(50% - 6px) !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; padding: 16px !important; break-inside: avoid; page-break-inside: avoid; margin-bottom: 12px !important; box-sizing: border-box !important; vertical-align: top; }
       
-      .chart-grid { display: flex !important; flex-wrap: wrap !important; gap: 10px !important; }
-      .card-box { width: 100% !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; padding: 16px !important; break-inside: avoid; margin-bottom: 10px !important;}
+      .chart-grid { display: block !important; break-before: page; page-break-before: always; }
+      .card-box { display: block !important; width: 100% !important; border: 1px solid #cbd5e1 !important; box-shadow: none !important; padding: 16px !important; break-inside: avoid; page-break-inside: avoid; margin-bottom: 20px !important; box-sizing: border-box !important; }
       
       /* MAP DIHILANGKAN SAAT CETAK AGAR TIDAK ERROR OFFLINE/CORS */
       .map-card { display: none !important; }
@@ -645,7 +645,7 @@ div[style*="text-align: center; margin-top: 20px;"] {
     <button class="btn btn-primary" id="btnSaveEdit" style="font-size: 16px; padding: 16px 24px; width: 100%; justify-content: center;" onclick="applyEdit()">KALKULASI ULANG</button>
   </div>
   
-  <div style="text-align: center; padding: 32px 0 16px; border-top: 1px solid var(--border-mid); color: var(--text-muted);">
+  <div id="footerBlock" style="text-align: center; padding: 32px 0 16px; border-top: 1px solid var(--border-mid); color: var(--text-muted);">
     <div style="font-size: 14px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">SISTEM DASHBOARD TERPADU</div>
     <div style="font-size: 12px; line-height: 1.6;">
       Credit to <strong>M0F4 Developer</strong><br>
@@ -1617,6 +1617,7 @@ function exportDataExcel() {
               
               const ws = XLSX.utils.json_to_sheet(qRows);
               for (let key in ws) { if (key[0] !== '!' && typeof ws[key].v === 'number') ws[key].z = '#,##0'; }
+              ws['!cols'] = Object.keys(qRows[0]).map(k => ({wch: Math.max(k.length + 2, 15)}));
               
               const sheetName = `TW - ${qRoman[q]} ${currentTahun}`;
               XLSX.utils.book_append_sheet(wb, ws, sheetName);
@@ -1658,6 +1659,7 @@ function exportDataExcel() {
       
       const ws = XLSX.utils.json_to_sheet(rows);
       for (let key in ws) { if (key[0] !== '!' && typeof ws[key].v === 'number') ws[key].z = '#,##0'; }
+      ws['!cols'] = rows.length > 0 ? Object.keys(rows[0]).map(k => ({wch: Math.max(k.length + 2, 15)})) : [];
       
       const qRoman = { 'Q1': 'I', 'Q2': 'II', 'Q3': 'III', 'Q4': 'IV' };
       const sheetName = `TW - ${qRoman[currentTriwulan]} ${currentTahun}`;
@@ -1694,6 +1696,7 @@ function exportToPNG() {
 
     el('kopSuratBlock').style.display = 'block'; el('ttdBlock').style.display = 'flex';
     const mapCard = document.querySelector('.map-card'); if(mapCard) mapCard.style.display = 'none';
+    const footerBlock = el('footerBlock'); if (footerBlock) footerBlock.style.display = 'none';
 
     let D = currentKpw === 'NASIONAL' ? getNationalData(currentTahun, currentTriwulan) : 
             (currentTriwulan === 'ALL' ? (currentKt ? getYearlyData(currentTahun, currentKt.split('_')[0], currentKt.split('_')[1]) : null) : 
@@ -1703,6 +1706,9 @@ function exportToPNG() {
     el('kopSuratPer').textContent = `PERIODE: ${currentTriwulan === 'ALL' ? `TAHUN PENUH ${currentTahun}` : `TRIWULAN ${currentTriwulan.replace('Q','')} TAHUN ${currentTahun}`}`;
     el('kopSuratTgl').textContent = `Dicetak pada: ${new Date().toLocaleString('id-ID')}`;
 
+    const origWidth = printArea.style.width;
+    printArea.style.width = '1200px'; // Lock width for consistent corporate standard layout
+    
     setTimeout(() => {
         html2canvas(printArea, { scale: 2, backgroundColor: '#f1f5f9', useCORS: true }).then(canvas => {
             let link = document.createElement('a'); link.download = `Laporan_${currentTahun}_${currentTriwulan}.png`;
@@ -1710,7 +1716,8 @@ function exportToPNG() {
         }).catch(err => { console.error(err); cleanupPNG(); showToast("❌ Gagal mengekspor."); });
 
         function cleanupPNG() {
-            el('kopSuratBlock').style.display = 'none'; el('ttdBlock').style.display = 'none'; if(mapCard) mapCard.style.display = ''; 
+            printArea.style.width = origWidth;
+            el('kopSuratBlock').style.display = 'none'; el('ttdBlock').style.display = 'none'; if(mapCard) mapCard.style.display = ''; if (footerBlock) footerBlock.style.display = '';
             if(isDark) { document.body.classList.add('dark-mode'); Chart.defaults.color = '#cbd5e1'; Chart.defaults.borderColor = '#334155'; if(chartArusKas) chartArusKas.update('none'); if(chartBiaya) chartBiaya.update('none'); if(chartSaldo) chartSaldo.update('none'); }
         }
     }, 800);
