@@ -101,7 +101,7 @@
   #loginError { color: var(--red-val); font-size: 13px; margin-top: 12px; display: none; font-weight: 600; }
 
   header { padding: 32px 0 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-  .sticky-toolbar { position: sticky; top: 0; background-color: rgba(241, 245, 249, 0.95); backdrop-filter: blur(4px); z-index: 100; padding: 16px 0; border-bottom: 1px solid var(--border-mid); margin-bottom: 32px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .sticky-toolbar { position: sticky; top: 0; background-color: rgba(241, 245, 249, 0.95); backdrop-filter: blur(4px); z-index: 100; padding: 16px 0; border-bottom: 1px solid var(--border-mid); margin-bottom: 32px; display: flex; gap: 10px; flex-wrap: nowrap; overflow: hidden; align-items: center; }
   body.dark-mode .sticky-toolbar { background-color: rgba(15, 23, 42, 0.95); }
   .header-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--blue-light); border: 1px solid var(--blue-primary); padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; color: var(--blue-primary); margin-bottom: 12px; }
   
@@ -113,14 +113,14 @@
   .btn-outline { background: #fff; border: 1px solid var(--border-mid); }
   .btn-outline:hover { border-color: var(--blue-primary); color: var(--blue-primary); background: var(--blue-light); }
   
-  select.search-box, input.search-box { background: #fff; border: 1px solid var(--border-mid); border-radius: 8px; padding: 9px 12px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; transition: 0.2s;}
+  select.search-box, input.search-box { background: #fff; border: 1px solid var(--border-mid); border-radius: 8px; padding: 9px 12px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; transition: 0.2s; max-width: 220px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; flex: 1 1 auto; min-width: 0; }
   select.search-box:focus { border-color: var(--blue-primary); }
-  .filter-group { display: flex; gap: 8px; background: var(--blue-light); padding: 6px; border-radius: 10px; border: 1px solid var(--blue-primary); }
+  .filter-group { display: flex; gap: 8px; background: var(--blue-light); padding: 6px; border-radius: 10px; border: 1px solid var(--blue-primary); flex: 1 1 auto; min-width: 0; }
 
   #printableArea { background: var(--bg-body); padding-top: 10px; }
 
   .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; margin-bottom: 32px; }
-  .kpi-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-card); position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
+  .kpi-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-card); position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: flex-start; gap: 16px; height: 100%; }
   .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-color: var(--blue-primary); }
   .kpi-label { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; }
   .kpi-value { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; white-space: nowrap; }
@@ -254,15 +254,17 @@ div[style*="text-align: center; margin-top: 20px;"] {
     </div>
 
     <input type="file" id="dataFileUpload" accept=".xlsx, .xls, .csv, .kml" style="display: none;" onchange="handleFileUpload(event)">
-    <button class="btn btn-outline" style="border-color: var(--green-val); color: var(--green-val);" onclick="document.getElementById('dataFileUpload').click()">📤 File</button>
-    <button class="btn btn-outline" style="border-color: var(--blue-primary); color: var(--blue-primary);" onclick="exportDataExcel()">📊 Save</button>
-    
-    <button class="btn btn-outline" style="border-color: #0891b2; color: #0891b2;" onclick="exportToPNG()">📷 PNG</button>
-    <button class="btn btn-outline" style="border-color: var(--text-muted); color: var(--text-main);" onclick="preparePrint()">🖨️ Print</button>
-    
-    <button class="btn btn-outline" style="background: var(--red-bg); color: var(--red-val); border-color: var(--red-val);" onclick="resetData()">Reset All</button>
-    
-    <button class="btn btn-outline" id="themeToggleBtn" onclick="toggleTheme()" style="margin-left: auto; border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 18px; border-color: var(--border-mid); padding: 0; box-shadow: var(--shadow-card);">🌙</button>
+    <div style="margin-left: auto; display: flex; gap: 10px; flex-wrap: nowrap; flex-shrink: 0;">
+      <button class="btn btn-outline" style="border-color: var(--green-val); color: var(--green-val);" onclick="document.getElementById('dataFileUpload').click()">📤 File</button>
+      <button class="btn btn-outline" style="border-color: var(--blue-primary); color: var(--blue-primary);" onclick="exportDataExcel()">📊 Save</button>
+      
+      <button class="btn btn-outline" style="border-color: #0891b2; color: #0891b2;" onclick="exportToPNG()">📷 PNG</button>
+      <button class="btn btn-outline" style="border-color: var(--text-muted); color: var(--text-main);" onclick="preparePrint()">🖨️ Print</button>
+      
+      <button class="btn btn-outline" style="background: var(--red-bg); color: var(--red-val); border-color: var(--red-val);" onclick="resetData()">Reset All</button>
+      
+      <button class="btn btn-outline" id="themeToggleBtn" onclick="toggleTheme()" style="border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 18px; border-color: var(--border-mid); padding: 0; box-shadow: var(--shadow-card);">🌙</button>
+    </div>
   </div>
 
   <div id="printableArea">
@@ -299,12 +301,19 @@ div[style*="text-align: center; margin-top: 20px;"] {
                 <div><span style="color: var(--text-muted);">No PKS:</span> <strong id="kv-no-pks" style="color: var(--text-main);">-</strong></div>
                 <div style="text-align: right;"><span style="color: var(--text-muted);">Tanggal:</span> <strong id="kv-tgl-pks" style="color: var(--text-main);">-</strong></div>
             </div>
+            
+            <div style="margin-top: 12px; background: var(--blue-light); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--blue-primary);">
+                <span style="font-size: 10px; color: var(--blue-primary); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">Nominal Plafon Kas Titipan:</span><br>
+                <strong id="kv-plafon-kpi" style="font-size: 18px; color: var(--blue-primary);">Rp 0</strong>
+            </div>
         </div>
         
-        <div style="margin-top: 16px; background: var(--blue-light); padding: 12px; border-radius: 8px; border: 1px solid var(--blue-primary);">
-            <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; text-transform: uppercase;">Peserta Aktif:</span><br>
-            <strong id="kv-peserta" style="font-size: 13px; color: var(--blue-primary); line-height: 1.4;">-</strong>
-            <div style="margin-top: 6px; font-size: 11px; color: var(--blue-primary); border-top: 1px solid var(--blue-primary); padding-top: 6px;">
+        <div style="background: var(--blue-light); padding: 12px; border-radius: 8px; border: 1px solid var(--blue-primary); flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; text-transform: uppercase;">Peserta Aktif:</span><br>
+                <strong id="kv-peserta" style="font-size: 13px; color: var(--blue-primary); line-height: 1.4;">-</strong>
+            </div>
+            <div style="font-size: 11px; color: var(--blue-primary); border-top: 1px solid var(--blue-primary); padding-top: 6px;">
                 Dari <strong id="kv-jml-bank" style="font-size: 12px;">0</strong> Terdaftar
             </div>
         </div>
@@ -342,61 +351,67 @@ div[style*="text-align: center; margin-top: 20px;"] {
 
 
             
-            <div id="box-inout-rincian" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px; display: none;">
-                <div style="flex: 1; padding: 10px 12px; background: var(--green-bg); border-radius: 8px; border: 1px solid var(--green-val);">
-                    <div style="font-size: 9px; color: var(--green-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 6px;">RINCIAN INFLOW</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--green-val); font-size: 11px;">
+        </div>
+        <div id="box-inout-rincian" style="display: flex; flex-direction: column; gap: 8px; flex: 1; display: none;">
+                <div style="flex: 1; padding: 12px 14px; background: var(--green-bg); border-radius: 8px; border: 1px solid var(--green-val); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 11px; color: var(--green-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase;">RINCIAN INFLOW</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--green-val); font-size: 14px;">
                         <span style="color: var(--green-val);" id="lbl-inflow-m1">Jan:</span>
                         <strong style="color: var(--green-val);" id="val-inflow-m1">-</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--green-val); font-size: 11px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--green-val); font-size: 14px;">
                         <span style="color: var(--green-val);" id="lbl-inflow-m2">Feb:</span>
                         <strong style="color: var(--green-val);" id="val-inflow-m2">-</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; font-size: 11px;" id="wrap-inflow-m3">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; padding-bottom: 4px; font-size: 14px;" id="wrap-inflow-m3">
                         <span style="color: var(--green-val);" id="lbl-inflow-m3">Mar:</span>
                         <strong style="color: var(--green-val);" id="val-inflow-m3">-</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 11px; padding-bottom: 4px; display: none;" id="wrap-inflow-m4">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; padding-bottom: 4px; display: none;" id="wrap-inflow-m4">
                         <span style="color: var(--green-val);" id="lbl-inflow-m4">Triwulan 4:</span>
                         <strong style="color: var(--green-val);" id="val-inflow-m4">-</strong>
                     </div>
                 </div>
-                <div style="flex: 1; padding: 10px 12px; background: var(--red-bg); border-radius: 8px; border: 1px solid var(--red-val);">
-                    <div style="font-size: 9px; color: var(--red-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 6px;">RINCIAN OUTFLOW</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--red-val); font-size: 11px;">
+                <div style="flex: 1; padding: 12px 14px; background: var(--red-bg); border-radius: 8px; border: 1px solid var(--red-val); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 11px; color: var(--red-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase;">RINCIAN OUTFLOW</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--red-val); font-size: 14px;">
                         <span style="color: var(--red-val);" id="lbl-outflow-m1">Jan:</span>
                         <strong style="color: var(--red-val);" id="val-outflow-m1">-</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--red-val); font-size: 11px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--red-val); font-size: 14px;">
                         <span style="color: var(--red-val);" id="lbl-outflow-m2">Feb:</span>
                         <strong style="color: var(--red-val);" id="val-outflow-m2">-</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; font-size: 11px;" id="wrap-outflow-m3">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; padding-bottom: 4px; font-size: 14px;" id="wrap-outflow-m3">
                         <span style="color: var(--red-val);" id="lbl-outflow-m3">Mar:</span>
                         <strong style="color: var(--red-val);" id="val-outflow-m3">-</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 11px; padding-bottom: 4px; display: none;" id="wrap-outflow-m4">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; padding-bottom: 4px; display: none;" id="wrap-outflow-m4">
                         <span style="color: var(--red-val);" id="lbl-outflow-m4">Triwulan 4:</span>
                         <strong style="color: var(--red-val);" id="val-outflow-m4">-</strong>
                     </div>
                 </div>
             </div>
-        </div>
-        
       </div>
 
-      <div class="kpi-card" style="border-top: 5px solid var(--gold-val); padding: 24px;">
+      <div class="kpi-card" style="border-top: 5px solid var(--gold-val); padding: 24px; display: flex; flex-direction: column;">
         <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px; margin-bottom: 0;">NETFLOW</div>
-                <span style="display: inline-block; padding: 4px 12px; border-radius: 30px; background: var(--bg-body); font-size: 11px; font-weight: 800; border: 1px solid var(--border-light);" id="kv-netflow-status-badge">Status: <span id="kv-netflow-status">-</span></span>
-            </div>
+            <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px; margin-bottom: 12px;">NETFLOW</div>
             <div style="margin-bottom: 16px;">
                 <span style="font-size: 14px; color: var(--text-muted);">Total Netflow:</span><br>
                 <strong class="kpi-value" id="kv-netflow-kpi" style="font-size: 22px; color: var(--text-main); line-height: 1.2;">Rp 0</strong>
             </div>
-            
+
+            <div id="kv-netflow-status-box" style="padding: 12px; border-radius: 8px; border: 1px solid var(--border-light); display: flex; align-items: center; gap: 12px; background: var(--bg-body);">
+                <div id="kv-netflow-icon" style="font-size: 24px;">📊</div>
+                <div>
+                    <div id="kv-netflow-status-title" style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">STATUS: <span id="kv-netflow-status">-</span></div>
+                    <div id="kv-netflow-status-desc" style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">Data pergerakan uang (Netflow) belum tersedia atau bernilai nol.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; flex: 1;">
             <div style="display: flex; gap: 10px; margin-bottom: 16px;">
                 <div style="flex: 1; padding: 10px 12px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val);">
                     <span style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">RATA-RATA NETFLOW</span><br>
@@ -408,28 +423,24 @@ div[style*="text-align: center; margin-top: 20px;"] {
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-                <div style="flex: 1; padding: 10px 12px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val);">
-                    <span style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">RATA-RATA MUTASI</span><br>
-                    <strong id="kv-avg-mutasi" style="font-size: 14px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
-                </div>
-                <div style="flex: 1; padding: 10px 12px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val);">
-                    <span style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">(IN+OUT)</span><br>
-                    <strong id="kv-tot-inout-kpi" style="font-size: 14px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+            <div style="margin-bottom: 16px;">
+                <div style="padding: 10px 12px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 10px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">TOTAL (IN+OUT)</span>
+                    <strong id="kv-tot-inout-kpi" style="font-size: 15px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
                 </div>
             </div>
-        </div>
-        
-        <div style="margin-top: auto; background: var(--gold-bg); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--gold-val);">
-            <div style="font-size: 11px; color: var(--gold-val); margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Rincian Netflow:</div>
+            
+            <div style="padding: 12px 14px; background: var(--gold-bg); border-radius: 8px; border: 1px solid var(--gold-val); flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-size: 11px; color: var(--gold-val); margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Rincian Netflow:</div>
             <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--gold-val); margin-bottom: 6px; border-bottom: 1px solid var(--gold-val); padding-bottom: 4px;"><span id="lbl-net-1">Bulan 1:</span> <strong id="kv-net-b1" style="white-space: nowrap;">Rp 0</strong></div>
             <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--gold-val); margin-bottom: 6px; border-bottom: 1px solid var(--gold-val); padding-bottom: 4px;"><span id="lbl-net-2">Bulan 2:</span> <strong id="kv-net-b2" style="white-space: nowrap;">Rp 0</strong></div>
             <div id="wrap-net-3" style="display: flex; justify-content: space-between; font-size: 13px; color: var(--gold-val); margin-bottom: 6px; padding-bottom: 4px;"><span id="lbl-net-3">Bulan 3:</span> <strong id="kv-net-b3" style="white-space: nowrap;">Rp 0</strong></div>
             <div id="wrap-net-4" style="display: none; justify-content: space-between; font-size: 13px; color: var(--gold-val);"><span id="lbl-net-4">Triwulan 4:</span> <strong id="kv-net-b4" style="white-space: nowrap;">Rp 0</strong></div>
+            </div>
         </div>
       </div>
 
-      <div class="kpi-card" style="border-top: 5px solid var(--teal-val); padding: 24px;">
+      <div class="kpi-card" style="border-top: 5px solid var(--teal-val); padding: 24px; display: flex; flex-direction: column;">
         <div>
             <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px;">SALDO AKHIR & HARIAN</div>
             <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
@@ -440,97 +451,176 @@ div[style*="text-align: center; margin-top: 20px;"] {
                 <span id="badge-saldo" style="display:none;"></span>
             </div>
             
-            <div style="margin-bottom: 16px; padding: 10px 14px; background: var(--teal-bg); border-radius: 8px; border: 1px solid var(--teal-val); display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <span style="font-size: 10px; color: var(--teal-val); font-weight: 800; letter-spacing: 0.5px;">KAPASITAS PLAFON TERPAKAI</span><br>
-                    <span style="font-size: 11px; color: var(--teal-val);">Berdasarkan Saldo Akhir</span>
-                </div>
-                <strong id="kv-pct-plafon" style="font-size: 20px; color: var(--teal-val);">0%</strong>
-            </div>
         </div>
-        
-        <div style="margin-top: auto; background: var(--teal-bg); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--teal-val);">
-            <div style="font-size: 11px; color: var(--teal-val); margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Rata-Rata Saldo Harian:</div>
-            <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--teal-val); margin-bottom: 6px; border-bottom: 1px solid var(--teal-val); padding-bottom: 4px;"><span id="lbl-sal-1">Bulan 1:</span> <strong id="kv-rata-b1" style="white-space: nowrap;">Rp 0</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--teal-val); margin-bottom: 6px; border-bottom: 1px solid var(--teal-val); padding-bottom: 4px;"><span id="lbl-sal-2">Bulan 2:</span> <strong id="kv-rata-b2" style="white-space: nowrap;">Rp 0</strong></div>
-            <div id="wrap-sal-3" style="display: flex; justify-content: space-between; font-size: 14px; color: var(--teal-val); margin-bottom: 6px; padding-bottom: 4px;"><span id="lbl-sal-3">Bulan 3:</span> <strong id="kv-rata-b3" style="white-space: nowrap;">Rp 0</strong></div>
-            <div id="wrap-sal-4" style="display: none; justify-content: space-between; font-size: 14px; color: var(--teal-val);"><span id="lbl-sal-4">Triwulan 4:</span> <strong id="kv-rata-b4" style="white-space: nowrap;">Rp 0</strong></div>
+            
+        <div style="display: flex; flex-direction: column; gap: 12px; flex: 1;">
+            <div style="padding: 12px 16px; background: var(--teal-bg); border-radius: 8px; border: 1px solid var(--teal-val); flex: 1; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="font-size: 11px; color: var(--teal-val); font-weight: 800; letter-spacing: 0.5px;">KAPASITAS PLAFON TERPAKAI</span><br>
+                    <span style="font-size: 12px; color: var(--teal-val);">Berdasarkan Saldo Akhir</span>
+                </div>
+                <strong id="kv-pct-plafon" style="font-size: 24px; color: var(--teal-val);">0%</strong>
+            </div>
+            
+            <div style="padding: 12px 16px; background: var(--teal-bg); border-radius: 8px; border: 1px solid var(--teal-val); flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-size: 11px; color: var(--teal-val); margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Rata-Rata Saldo Harian:</div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--teal-val); margin-bottom: 6px; border-bottom: 1px solid var(--teal-val); padding-bottom: 4px;"><span id="lbl-sal-1">Bulan 1:</span> <strong id="kv-rata-b1" style="white-space: nowrap;">Rp 0</strong></div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--teal-val); margin-bottom: 6px; border-bottom: 1px solid var(--teal-val); padding-bottom: 4px;"><span id="lbl-sal-2">Bulan 2:</span> <strong id="kv-rata-b2" style="white-space: nowrap;">Rp 0</strong></div>
+                <div id="wrap-sal-3" style="display: flex; justify-content: space-between; font-size: 14px; color: var(--teal-val); margin-bottom: 6px; padding-bottom: 4px;"><span id="lbl-sal-3">Bulan 3:</span> <strong id="kv-rata-b3" style="white-space: nowrap;">Rp 0</strong></div>
+                <div id="wrap-sal-4" style="display: none; justify-content: space-between; font-size: 14px; color: var(--teal-val);"><span id="lbl-sal-4">Triwulan 4:</span> <strong id="kv-rata-b4" style="white-space: nowrap;">Rp 0</strong></div>
+            </div>
         </div>
       </div>
 
-      <div class="kpi-card" style="border-top: 5px solid var(--blue-primary); padding: 24px;">
+      <div class="kpi-card" style="border-top: 5px solid var(--blue-primary); padding: 24px; display: flex; flex-direction: column;">
         <div>
             <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px;">SETORAN UTLE</div>
             <div style="margin-bottom: 12px;">
                 <span style="font-size: 14px; color: var(--text-muted);">Jumlah Setoran UTLE:</span><br>
                 <strong class="kpi-value" id="kv-utle-jml" style="color: var(--blue-primary);">Rp 0</strong>
             </div>
-            <div style="padding: 10px 14px; background: var(--blue-light); border-radius: 8px; border: 1px solid var(--blue-primary); display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <div>
-                    <span style="font-size: 10px; color: var(--blue-primary); font-weight: 800; letter-spacing: 0.5px;">PERSENTASE UTLE</span><br>
-                    <span style="font-size: 11px; color: var(--blue-primary);">Dari Total Setoran</span>
-                </div>
-                <strong id="kv-utle-pct" style="font-size: 20px; color: var(--blue-primary);">0%</strong>
-            </div>
         </div>
-        <div style="margin-top: auto; background: var(--blue-light); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--blue-primary);">
-            <div style="font-size: 11px; color: var(--blue-primary); margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Rincian Per Bulan:</div>
-            <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--blue-primary); margin-bottom: 6px; border-bottom: 1px solid var(--blue-primary); padding-bottom: 4px;"><span id="lbl-utle-1">Bulan 1:</span> <strong id="kv-utle-b1" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--blue-primary); margin-bottom: 6px; border-bottom: 1px solid var(--blue-primary); padding-bottom: 4px;"><span id="lbl-utle-2">Bulan 2:</span> <strong id="kv-utle-b2" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
-            <div id="wrap-utle-3" style="display: flex; justify-content: space-between; font-size: 13px; color: var(--blue-primary); margin-bottom: 6px; padding-bottom: 4px;"><span id="lbl-utle-3">Bulan 3:</span> <strong id="kv-utle-b3" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
-            <div id="wrap-utle-4" style="display: none; justify-content: space-between; font-size: 13px; color: var(--blue-primary);"><span id="lbl-utle-4">Triwulan 4:</span> <strong id="kv-utle-b4" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px; flex: 1;">
+            <div style="padding: 12px 16px; background: var(--blue-light); border-radius: 8px; border: 1px solid var(--blue-primary); flex: 1; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; letter-spacing: 0.5px;">PERSENTASE UTLE</span><br>
+                    <span style="font-size: 12px; color: var(--blue-primary);">Dari Total Setoran</span>
+                </div>
+                <strong id="kv-utle-pct" style="font-size: 24px; color: var(--blue-primary);">0%</strong>
+            </div>
+            
+            <div style="padding: 12px 16px; background: var(--blue-light); border-radius: 8px; border: 1px solid var(--blue-primary); flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-size: 11px; color: var(--blue-primary); margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Rincian Per Bulan:</div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--blue-primary); margin-bottom: 6px; border-bottom: 1px solid var(--blue-primary); padding-bottom: 4px;"><span id="lbl-utle-1">Bulan 1:</span> <strong id="kv-utle-b1" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--blue-primary); margin-bottom: 6px; border-bottom: 1px solid var(--blue-primary); padding-bottom: 4px;"><span id="lbl-utle-2">Bulan 2:</span> <strong id="kv-utle-b2" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
+                <div id="wrap-utle-3" style="display: flex; justify-content: space-between; font-size: 13px; color: var(--blue-primary); margin-bottom: 6px; padding-bottom: 4px;"><span id="lbl-utle-3">Bulan 3:</span> <strong id="kv-utle-b3" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
+                <div id="wrap-utle-4" style="display: none; justify-content: space-between; font-size: 13px; color: var(--blue-primary);"><span id="lbl-utle-4">Triwulan 4:</span> <strong id="kv-utle-b4" style="white-space: nowrap;">Rp 0 (0%)</strong></div>
+            </div>
         </div>
       </div>
 
       <div class="kpi-card" style="border-top: 5px solid var(--text-muted); padding: 24px;">
         <div>
             <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px;">SETOR-TARIK TERBESAR</div>
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
-                <div style="background: var(--blue-light); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--blue-primary);">
-                    <span style="font-size: 10px; color: var(--blue-primary); font-weight: 800;">PENYETORAN TERBESAR</span><br>
-                    <strong id="kv-setor-nama" style="font-size: 13px; color: var(--text-main);">-</strong><br>
-                    <strong id="kv-setor-nom" style="font-size: 16px; color: var(--blue-primary);">Rp 0</strong>
-                </div>
-                <div style="background: var(--red-bg); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--red-val);">
-                    <span style="font-size: 10px; color: var(--red-val); font-weight: 800;">PENARIKAN TERBESAR</span><br>
-                    <strong id="kv-tarik-nama" style="font-size: 13px; color: var(--text-main);">-</strong><br>
-                    <strong id="kv-tarik-nom" style="font-size: 16px; color: var(--red-val);">Rp 0</strong>
+            
+            <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="font-size: 14px; color: var(--text-muted);">Total Setor-Tarik Terbesar:</span><br>
+                    <strong class="kpi-value" id="kv-tot-terbesar" style="color: var(--text-main);">Rp 0</strong>
                 </div>
             </div>
+            
         </div>
-        
-        <div style="margin-top: auto; padding-top: 16px;">
-            <div style="padding: 10px 14px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-body); border: 1px solid var(--border-mid);">
-                <div><span style="font-size: 10px; color: var(--text-muted); font-weight: 800;">TEMUAN LAPORAN</span><br><strong id="kv-temuan" style="font-size: 16px; color: var(--gold-val);">0</strong></div>
-                <div style="text-align:right;"><span style="font-size: 10px; color: var(--text-muted); font-weight: 800;">TELAT LAPOR?</span><br><strong id="kv-telat" style="font-size: 14px; color: var(--text-main);">-</strong></div>
+            
+        <div style="display: flex; flex-direction: column; gap: 12px; flex: 1;">
+            <div style="background: var(--blue-light); padding: 12px 14px; border-radius: 8px; border: 1px solid var(--blue-primary); flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; margin-bottom: 8px;">PENYETORAN TERBESAR</span>
+                <strong id="kv-setor-nama" style="font-size: 14px; color: var(--text-main); margin-bottom: 2px;">-</strong>
+                <strong id="kv-setor-nom" style="font-size: 18px; color: var(--blue-primary);">Rp 0</strong>
+            </div>
+            <div style="background: var(--red-bg); padding: 12px 14px; border-radius: 8px; border: 1px solid var(--red-val); flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                <span style="font-size: 11px; color: var(--red-val); font-weight: 800; margin-bottom: 8px;">PENARIKAN TERBESAR</span>
+                <strong id="kv-tarik-nama" style="font-size: 14px; color: var(--text-main); margin-bottom: 2px;">-</strong>
+                <strong id="kv-tarik-nom" style="font-size: 18px; color: var(--red-val);">Rp 0</strong>
             </div>
         </div>
       </div>
 
       <div class="kpi-card" style="border-top: 5px solid var(--gold-val); padding: 24px;">
         <div>
-            <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px;">ASURANSI KAS TITIPAN</div>
+            <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px;">DATA ASURANSI & PJPUR</div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
-                <div><span style="font-size: 11px; color: var(--text-muted);">Perusahaan:</span><br><strong id="kv-asr-nama" style="font-size: 13px; color: var(--text-main);">-</strong></div>
+                <div><span style="font-size: 11px; color: var(--text-muted);">Asuransi:</span><br><strong id="kv-asr-nama" style="font-size: 13px; color: var(--text-main);">-</strong></div>
                 <div style="text-align: right;"><span style="font-size: 11px; color: var(--text-muted);">Jenis:</span><br><strong id="kv-asr-jenis" style="font-size: 13px; color: var(--text-main);">-</strong></div>
             </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+                <div><span style="font-size: 11px; color: var(--text-muted);">Nama PJPUR:</span><br><strong id="kv-pjpur-nama" style="font-size: 13px; color: var(--text-main);">-</strong></div>
+                <div style="text-align: right;"><span style="font-size: 11px; color: var(--text-muted);">Ada di Wilayah?:</span><br><strong id="kv-pjpur-izin" style="font-size: 13px; color: var(--text-main);">-</strong></div>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <span style="font-size: 11px; color: var(--text-muted);">Nomor Polis:</span><br>
+                <strong id="kv-asr-polis" style="font-size: 13px; color: var(--text-main);">-</strong>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <span style="font-size: 11px; color: var(--text-muted);">Jangka Waktu Pertanggungan:</span><br>
+                <strong id="kv-asr-waktu" style="font-size: 12px; color: var(--text-main); line-height: 1.3; display: block; margin-top: 2px;">-</strong>
+            </div>
             <div style="margin-bottom: 16px;">
-                <span style="font-size: 12px; color: var(--text-muted);">Nomor Polis:</span><br>
-                <strong id="kv-asr-polis" style="font-size: 14px; color: var(--text-main);">-</strong>
+                <span style="font-size: 11px; color: var(--text-muted);">Obyek/Lokasi Pertanggungan:</span><br>
+                <strong id="kv-asr-obyek" style="font-size: 12px; color: var(--text-main); line-height: 1.3; display: block; margin-top: 2px;">-</strong>
             </div>
         </div>
-        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 6px;">
-            <div style="padding: 8px 12px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 10px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">LIMIT CIS</span>
-                <strong id="kv-asr-cis" style="font-size: 13px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+        <div style="display: flex; gap: 8px; flex: 1;">
+            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px;">LIMIT CIS</div>
+                <strong id="kv-asr-cis" style="font-size: 11px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
             </div>
-            <div style="padding: 8px 12px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 10px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">LIMIT CICB</span>
-                <strong id="kv-asr-cicb" style="font-size: 13px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px;">LIMIT CICB</div>
+                <strong id="kv-asr-cicb" style="font-size: 11px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
             </div>
-            <div style="padding: 8px 12px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 10px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px;">LIMIT CIT</span>
-                <strong id="kv-asr-cit" style="font-size: 13px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px;">LIMIT CIT</div>
+                <strong id="kv-asr-cit" style="font-size: 11px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+            </div>
+        </div>
+      </div>
+
+      <div class="kpi-card" style="border-top: 5px solid var(--blue-primary); padding: 24px; display: flex; flex-direction: column;">
+        <div>
+            <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px;">LAYANAN PENUKARAN</div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+                <div><span style="font-size: 11px; color: var(--text-muted);">Status Layanan:</span><br><strong id="kv-lyn-status" style="font-size: 13px; color: var(--text-main);">-</strong></div>
+                <div style="text-align: right;"><span style="font-size: 11px; color: var(--text-muted);">Jadwal:</span><br><strong id="kv-lyn-jadwal" style="font-size: 13px; color: var(--text-main);">-</strong></div>
+            </div>
+            
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px; flex: 1;">
+            <div style="background: var(--blue-light); padding: 16px; border-radius: 8px; border: 1px solid var(--blue-primary); flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; gap: 12px;">
+                <div>
+                    <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; text-transform: uppercase;">Jml Realisasi Penukaran:</span><br>
+                    <strong id="kv-lyn-realisasi" style="font-size: 20px; color: var(--blue-primary);">0</strong>
+                </div>
+                <div style="border-top: 1px solid rgba(14, 165, 233, 0.2); padding-top: 12px;">
+                    <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; text-transform: uppercase;">Jml Penukar (Orang):</span><br>
+                    <strong id="kv-lyn-penukar" style="font-size: 20px; color: var(--blue-primary);">0</strong>
+                </div>
+            </div>
+            
+            <div style="background: var(--blue-light); padding: 16px; border-radius: 8px; border: 1px solid var(--blue-primary); flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <span style="font-size: 11px; color: var(--blue-primary); font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">Rata-Rata Penukar per Layanan</span>
+                <div><strong id="kv-lyn-rata" style="font-size: 24px; color: var(--blue-primary);">0</strong> <span style="font-size: 13px; color: var(--blue-primary); font-weight: 700;">Orang</span></div>
+            </div>
+        </div>
+      </div>
+
+      <div class="kpi-card" style="border-top: 5px solid var(--green-val); padding: 24px;">
+        <div>
+            <div class="kpi-label" style="font-size: 14px; letter-spacing: 0.5px;">BIAYA OPERASIONAL</div>
+            <div style="margin-bottom: 12px;">
+                <span style="font-size: 14px; color: var(--text-muted);">Total Biaya Operasional:</span><br>
+                <strong id="kv-eff-totbiaya" style="font-size: 24px; color: var(--text-main);">Rp 0</strong>
+            </div>
+            
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px; flex: 1;">
+            <div style="background: var(--green-bg); padding: 12px 14px; border-radius: 8px; border: 1px solid var(--green-val); flex: 1; display: flex; flex-direction: column; justify-content: space-evenly;">
+                <div style="font-size: 11px; color: var(--green-val); margin-bottom: 6px; font-weight: 800; border-bottom: 1px solid rgba(21, 128, 61, 0.2); padding-bottom: 6px; text-transform: uppercase;">Rincian Per Jenis Biaya:</div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: var(--green-val);"><span>B.Ops:</span> <strong id="kv-eff-jenis-bops">Rp 0</strong></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: var(--green-val);"><span>Asuransi:</span> <strong id="kv-eff-jenis-asr">Rp 0</strong></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: var(--green-val);"><span>Pengolahan UTLE:</span> <strong id="kv-eff-jenis-utle">Rp 0</strong></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: var(--green-val);"><span>Pemeliharaan:</span> <strong id="kv-eff-jenis-pelihara">Rp 0</strong></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--green-val);"><span>Pendirian:</span> <strong id="kv-eff-jenis-diri">Rp 0</strong></div>
+            </div>
+
+            <div style="background: var(--green-bg); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--green-val); flex: 1; display: flex; flex-direction: column; justify-content: space-evenly;">
+                <div style="font-size: 11px; color: var(--green-val); margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Rincian Per Bulan:</div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--green-val); margin-bottom: 6px; border-bottom: 1px solid rgba(21, 128, 61, 0.2); padding-bottom: 4px;"><span id="lbl-eff-1">Bulan 1:</span> <div style="text-align: right;"><span id="kv-eff-det-1" style="font-size: 10px; color: var(--green-val); opacity: 0.8; margin-right: 6px; font-weight: 600;"></span><strong id="kv-eff-b1" style="white-space: nowrap;">Rp 0</strong></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--green-val); margin-bottom: 6px; border-bottom: 1px solid rgba(21, 128, 61, 0.2); padding-bottom: 4px;"><span id="lbl-eff-2">Bulan 2:</span> <div style="text-align: right;"><span id="kv-eff-det-2" style="font-size: 10px; color: var(--green-val); opacity: 0.8; margin-right: 6px; font-weight: 600;"></span><strong id="kv-eff-b2" style="white-space: nowrap;">Rp 0</strong></div></div>
+                <div id="wrap-eff-3" style="display: flex; justify-content: space-between; font-size: 13px; color: var(--green-val); margin-bottom: 6px; padding-bottom: 4px;"><span id="lbl-eff-3">Bulan 3:</span> <div style="text-align: right;"><span id="kv-eff-det-3" style="font-size: 10px; color: var(--green-val); opacity: 0.8; margin-right: 6px; font-weight: 600;"></span><strong id="kv-eff-b3" style="white-space: nowrap;">Rp 0</strong></div></div>
             </div>
         </div>
       </div>
@@ -913,16 +1003,46 @@ function getNationalData(tahun, triwulan) {
     res.pengelola = 'KPwDN Nasional';
     res.no_pks = 'Terdata';
     res.tgl_pks = 'Terdata';
-    res.peserta = '594 Perbankan';
-    res.pct_kepesertaan = '80%';
+    
     let qList = triwulan === 'ALL' ? ['Q1', 'Q2', 'Q3', 'Q4'] : [triwulan];
     let totalCabang = 0;
+    let totalActiveBanks = 0;
+
+    res.in_max_nom = 0; res.out_max_nom = 0;
+    res.in_max_nama = '-'; res.out_max_nama = '-';
+    
+    let asrNamaSet = new Set();
+    let asrJenisSet = new Set();
+    let asrPolisSet = new Set();
 
     qList.forEach((q, idx) => {
         if(DATA_STORE[tahun] && DATA_STORE[tahun][q]) {
             Object.values(DATA_STORE[tahun][q]).forEach(d => {
                 totalCabang++;
-                DATA_SCHEMA.forEach(f => { if((f.type === 'number' || f.type === 'currency') && d[f.id]) res[f.id] += d[f.id]; });
+                if (d.peserta && d.peserta !== '-') {
+                    totalActiveBanks += d.peserta.split(',').filter(x => x.trim() !== '').length;
+                }
+                
+                if (d.asr_nama && d.asr_nama !== '-') asrNamaSet.add(d.asr_nama.trim().toUpperCase());
+                if (d.asr_jenis && d.asr_jenis !== '-') asrJenisSet.add(d.asr_jenis.trim().toUpperCase());
+                if (d.asr_polis && d.asr_polis !== '-') asrPolisSet.add(d.asr_polis.trim().toUpperCase());
+                
+                DATA_SCHEMA.forEach(f => { 
+                    if((f.type === 'number' || f.type === 'currency') && d[f.id]) {
+                        if(f.id !== 'in_max_nom' && f.id !== 'out_max_nom') res[f.id] += d[f.id]; 
+                    }
+                });
+                
+                // Track absolute maximums for National View
+                if(d.in_max_nom && d.in_max_nom > res.in_max_nom) {
+                    res.in_max_nom = d.in_max_nom;
+                    res.in_max_nama = (d.in_max_nama || '-') + ` (${d.kpw})`;
+                }
+                if(d.out_max_nom && d.out_max_nom > res.out_max_nom) {
+                    res.out_max_nom = d.out_max_nom;
+                    res.out_max_nama = (d.out_max_nama || '-') + ` (${d.kpw})`;
+                }
+
                 if(triwulan === 'ALL') {
                     res.q_in[idx] += (d.in_tw || 0); res.q_out[idx] += (d.out_tw || 0);
                     res.q_saldo[idx] += (d.saldo_tw || 0); res.q_plafon[idx] += (d.plafon || 0);
@@ -937,12 +1057,24 @@ function getNationalData(tahun, triwulan) {
     });
 
     if(totalCabang === 0) return null;
-    res.jml_perbankan = totalCabang;
+    
+    res.peserta = totalActiveBanks + ' Perbankan';
+    res.pct_kepesertaan = res.jml_perbankan ? parseFloat(((totalActiveBanks / res.jml_perbankan) * 100).toFixed(2)) + '%' : '0%';
+    
+    res.asr_nama = asrNamaSet.size > 0 ? 'Terdata' : '-';
+    res.asr_jenis = asrJenisSet.size > 0 ? 'Terdata' : '-';
+    res.asr_polis = asrPolisSet.size > 0 ? 'Terdata' : '-';
+    
     res.nom_net_tw = Math.abs(res.in_tw - res.out_tw);
     res.status_net_tw = res.in_tw - res.out_tw >= 0 ? 'Inflow' : 'Outflow';
     res.tot_inout_tw = res.in_tw + res.out_tw;
     
     res.pct_utle_tw = res.in_tw ? parseFloat(((res.utle_tw / res.in_tw) * 100).toFixed(2)) : 0;
+    
+    // Calculate monthly UTLE percentages
+    res.pct_utle_b1 = res.in_b1 ? parseFloat(((res.utle_b1 / res.in_b1) * 100).toFixed(2)) : '-';
+    res.pct_utle_b2 = res.in_b2 ? parseFloat(((res.utle_b2 / res.in_b2) * 100).toFixed(2)) : '-';
+    res.pct_utle_b3 = res.in_b3 ? parseFloat(((res.utle_b3 / res.in_b3) * 100).toFixed(2)) : '-';
     
     if(triwulan === 'ALL') {
         res.q_pct_utle = res.q_utle_setoran.map((utle, i) => 
@@ -1068,13 +1200,11 @@ function initSelectors() {
       kpwSel.options.add(new Option('--Data Kosong--', '')); 
       currentKpw = ''; 
   } else { 
-      // Opsi "NASIONAL" telah dihapus secara permanen di sini
-      kpws.forEach(k => kpwSel.options.add(new Option(k, k))); 
+      kpwSel.options.add(new Option('Nasional', 'NASIONAL'));
+      kpws.forEach((k, idx) => kpwSel.options.add(new Option(`${idx + 1}. ${k}`, k))); 
       
-      // Logika Penentuan Default: 
-      // Jika sebelumnya 'NASIONAL' atau tidak ada di list, pilih item pertama
-      if(currentKpw === 'NASIONAL' || !kpws.includes(currentKpw)) {
-          currentKpw = kpws[0];
+      if(!kpws.includes(currentKpw) && currentKpw !== 'NASIONAL') {
+          currentKpw = 'NASIONAL';
       }
       kpwSel.value = currentKpw; 
   }
@@ -1085,7 +1215,14 @@ function initSelectors() {
 function updateKtSelector() {
   const ktSel = el('ktSelector'); 
   ktSel.innerHTML = ''; 
-  ktSel.disabled = false; // Selalu aktif karena mode Nasional sudah dibuang
+  ktSel.disabled = false; 
+  
+  if (currentKpw === 'NASIONAL') {
+      ktSel.options.add(new Option('Seluruh Kastip', 'ALL_KASTIP'));
+      currentKt = 'ALL_KASTIP';
+      ktSel.disabled = true;
+      return;
+  }
   
   let kts = new Set();
   let baseDataObj = (currentTriwulan === 'ALL') 
@@ -1099,7 +1236,7 @@ function updateKtSelector() {
       ktSel.options.add(new Option('Silahkan Upload-->', '')); 
       currentKt = ''; 
   } else { 
-      kts.forEach(k => ktSel.options.add(new Option(k, currentKpw + '_' + k))); 
+      kts.forEach((k, idx) => ktSel.options.add(new Option(`${idx + 1}. ${k}`, currentKpw + '_' + k))); 
       let isExist = Array.from(ktSel.options).some(opt => opt.value === currentKt);
       if(isExist) ktSel.value = currentKt; else currentKt = ktSel.value;
   }
@@ -1774,15 +1911,21 @@ function renderAll() {
     setTxt('kv-jml-bank', '0'); setTxt('kv-pct-peserta', '-');
     setTxt('kv-setor-nama', '-'); setTxt('kv-setor-nom', 'Rp 0');
     setTxt('kv-tarik-nama', '-'); setTxt('kv-tarik-nom', 'Rp 0');
+    setTxt('kv-tot-terbesar', 'Rp 0');
     setTxt('kv-temuan', '0'); setTxt('kv-telat', '-');
     
-    setTxt('kv-lyn-status', '-'); setTxt('kv-lyn-jadwal', '-'); setTxt('kv-lyn-realisasi', '0'); setTxt('kv-lyn-penukar', '0');
+    setTxt('kv-lyn-status', '-'); setTxt('kv-lyn-jadwal', '-'); setTxt('kv-lyn-realisasi', '0'); setTxt('kv-lyn-penukar', '0'); setTxt('kv-lyn-rata', '0');
     setTxt('kv-b-pelihara', 'Rp 0'); setTxt('kv-b-diri', 'Rp 0'); setTxt('kv-b-ekstra-tot', 'Rp 0');
 
     setTxt('kv-inflow-kpi', 'Rp 0'); setStyle('badge-inflow', 'display', 'none');
     setTxt('kv-outflow-kpi', 'Rp 0'); setStyle('badge-outflow', 'display', 'none');
     setTxt('kv-tot-inout-kpi', 'Rp 0'); setTxt('kv-netflow-kpi', 'Rp 0');
-    setTxt('kv-netflow-status', '-'); setStyle('kv-netflow-status-badge', 'background', 'var(--bg-body)'); setStyle('kv-netflow-status-badge', 'borderColor', 'var(--border-light)');
+    setTxt('kv-netflow-status', '-'); 
+    if(el('kv-netflow-status-box')) {
+        setStyle('kv-netflow-status-box', 'background', 'var(--bg-body)'); setStyle('kv-netflow-status-box', 'borderColor', 'var(--border-light)');
+        setTxt('kv-netflow-icon', '📊'); setStyle('kv-netflow-status-title', 'color', 'var(--text-muted)');
+        setTxt('kv-netflow-status-desc', 'Data pergerakan uang (Netflow) belum tersedia atau bernilai nol.'); setStyle('kv-netflow-status-desc', 'color', 'var(--text-muted)');
+    }
     
     if (isAll) {
         setTxt('lbl-net-1', 'Triwulan 1:'); setTxt('lbl-net-2', 'Triwulan 2:'); setTxt('lbl-net-3', 'Triwulan 3:'); setTxt('lbl-net-4', 'Triwulan 4:');
@@ -1807,7 +1950,7 @@ function renderAll() {
         setTxt('kv-rata-b1', 'Rp 0'); setTxt('kv-rata-b2', 'Rp 0'); setTxt('kv-rata-b3', 'Rp 0');
         setTxt('kv-utle-b1', 'Rp 0 (0%)'); setTxt('kv-utle-b2', 'Rp 0 (0%)'); setTxt('kv-utle-b3', 'Rp 0 (0%)');
     }
-    setTxt('kv-saldo-akhir-kpi', 'Rp 0'); setStyle('badge-saldo', 'display', 'none');
+    setTxt('kv-saldo-akhir-kpi', 'Rp 0'); setTxt('kv-plafon-kpi', 'Rp 0'); setStyle('badge-saldo', 'display', 'none');
     setTxt('kv-pct-in-text', 'IN 0%'); setTxt('kv-pct-out-text', 'OUT 0%');
     setStyle('bar-inflow', 'width', '0%'); setStyle('bar-outflow', 'width', '0%');
     setTxt('kv-avg-mutasi', 'Rp 0'); setTxt('kv-avg-netflow', 'Rp 0');
@@ -1817,6 +1960,10 @@ function renderAll() {
     setTxt('kv-utle-jml', 'Rp 0'); setTxt('kv-utle-pct', '0%');
     setTxt('kv-asr-nama', '-'); setTxt('kv-asr-jenis', '-'); setTxt('kv-asr-polis', '-');
     setTxt('kv-asr-cis', 'Rp 0'); setTxt('kv-asr-cicb', 'Rp 0'); setTxt('kv-asr-cit', 'Rp 0');
+    setTxt('kv-pjpur-nama', '-'); setTxt('kv-pjpur-izin', '-'); setTxt('kv-asr-waktu', '-'); setTxt('kv-asr-obyek', '-');
+    setTxt('kv-eff-totbiaya', 'Rp 0'); setTxt('kv-eff-b1', 'Rp 0'); setTxt('kv-eff-b2', 'Rp 0'); setTxt('kv-eff-b3', 'Rp 0'); setTxt('kv-eff-b4', 'Rp 0');
+    setTxt('kv-eff-det-1', ''); setTxt('kv-eff-det-2', ''); setTxt('kv-eff-det-3', ''); setTxt('kv-eff-det-4', '');
+    setTxt('kv-eff-jenis-bops', 'Rp 0'); setTxt('kv-eff-jenis-asr', 'Rp 0'); setTxt('kv-eff-jenis-utle', 'Rp 0'); setTxt('kv-eff-jenis-pelihara', 'Rp 0'); setTxt('kv-eff-jenis-diri', 'Rp 0');
 
     if(chartArusKas) chartArusKas.destroy(); if(chartBiaya) chartBiaya.destroy(); if(chartSaldo) chartSaldo.destroy();
     el('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;">Tidak ada data. Silakan isi form di bawah.</td></tr>';
@@ -1831,9 +1978,13 @@ function renderAll() {
   setTxt('kv-jml-bank', D.jml_perbankan || cBanks || '0'); setTxt('kv-pct-peserta', D.pct_kepesertaan ? D.pct_kepesertaan + (D.pct_kepesertaan.toString().includes('%') ? '' : '%') : '-');
   setTxt('kv-setor-nama', D.setor_nama || '-'); setTxt('kv-setor-nom', fmt(D.setor_nom));
   setTxt('kv-tarik-nama', D.tarik_nama || '-'); setTxt('kv-tarik-nom', fmt(D.tarik_nom));
+  setTxt('kv-tot-terbesar', fmt((D.setor_nom || 0) + (D.tarik_nom || 0)));
   setTxt('kv-temuan', D.lap_temuan || '0'); setTxt('kv-telat', D.lap_telat || '-');
   
   setTxt('kv-lyn-status', D.lyn_penukaran || '-'); setTxt('kv-lyn-jadwal', D.lyn_jadwal || '-'); setTxt('kv-lyn-realisasi', D.lyn_realisasi || '0'); setTxt('kv-lyn-penukar', D.lyn_penukar || '0');
+  let realisasi = parseFloat(D.lyn_realisasi) || 0;
+  let penukar = parseFloat(D.lyn_penukar) || 0;
+  setTxt('kv-lyn-rata', realisasi > 0 ? (penukar / realisasi).toFixed(1) : '0');
   setTxt('kv-b-pelihara', fmt(D.b_pelihara)); setTxt('kv-b-diri', fmt(D.b_diri)); setTxt('kv-b-ekstra-tot', fmt((D.b_pelihara||0) + (D.b_diri||0)));
 
   setTxt('kv-inflow-kpi', fmt(D.in_tw)); if(prevD) renderGrowthBadge(D.in_tw, prevD.in_tw, 'badge-inflow', false); else setStyle('badge-inflow', 'display', 'none');
@@ -1841,12 +1992,29 @@ function renderAll() {
   setTxt('kv-tot-inout-kpi', fmt(D.tot_inout_tw));
   
   setTxt('kv-netflow-kpi', fmt(D.nom_net_tw)); 
-  setTxt('kv-netflow-status', D.status_net_tw || '-');
-  let badgeSt = el('kv-netflow-status-badge');
-  if(badgeSt) {
-      if(D.status_net_tw === 'Inflow') { badgeSt.style.background = 'var(--green-bg)'; badgeSt.style.color = 'var(--green-val)'; badgeSt.style.borderColor = 'var(--green-val)'; }
-      else if(D.status_net_tw === 'Outflow') { badgeSt.style.background = 'var(--red-bg)'; badgeSt.style.color = 'var(--red-val)'; badgeSt.style.borderColor = 'var(--red-val)'; }
-      else { badgeSt.style.background = 'var(--bg-body)'; badgeSt.style.color = 'var(--text-main)'; badgeSt.style.borderColor = 'var(--border-light)'; }
+  let netSt = D.status_net_tw || '-';
+  setTxt('kv-netflow-status', netSt);
+  let box = el('kv-netflow-status-box');
+  if(box) {
+      if(netSt === 'Inflow') { 
+          box.style.background = 'var(--green-bg)'; box.style.borderColor = 'var(--green-val)';
+          el('kv-netflow-icon').innerText = '📈';
+          el('kv-netflow-status-title').style.color = 'var(--green-val)';
+          el('kv-netflow-status-desc').innerText = 'Terjadi lebih banyak penyetoran dana dibandingkan penarikan pada periode ini.';
+          el('kv-netflow-status-desc').style.color = 'var(--text-main)';
+      } else if(netSt === 'Outflow') { 
+          box.style.background = 'var(--red-bg)'; box.style.borderColor = 'var(--red-val)';
+          el('kv-netflow-icon').innerText = '📉';
+          el('kv-netflow-status-title').style.color = 'var(--red-val)';
+          el('kv-netflow-status-desc').innerText = 'Terjadi lebih banyak penarikan dana dibandingkan penyetoran pada periode ini.';
+          el('kv-netflow-status-desc').style.color = 'var(--text-main)';
+      } else { 
+          box.style.background = 'var(--bg-body)'; box.style.borderColor = 'var(--border-light)';
+          el('kv-netflow-icon').innerText = '📊';
+          el('kv-netflow-status-title').style.color = 'var(--text-muted)';
+          el('kv-netflow-status-desc').innerText = 'Data pergerakan uang (Netflow) belum tersedia atau bernilai nol.';
+          el('kv-netflow-status-desc').style.color = 'var(--text-muted)';
+      }
   }
 
   if(isAll) {
@@ -1907,7 +2075,9 @@ function renderAll() {
       setTxt('kv-utle-b3', fmt(D.utle_b3) + ' (' + (D.pct_utle_b3||0) + '%)');
   }
   
-  setTxt('kv-saldo-akhir-kpi', fmt(D.saldo_tw)); if(prevD) renderGrowthBadge(D.saldo_tw, prevD.saldo_tw, 'badge-saldo', false); else setStyle('badge-saldo', 'display', 'none');
+  setTxt('kv-saldo-akhir-kpi', fmt(D.saldo_tw)); 
+  setTxt('kv-plafon-kpi', fmt(D.plafon || 0));
+  if(prevD) renderGrowthBadge(D.saldo_tw, prevD.saldo_tw, 'badge-saldo', false); else setStyle('badge-saldo', 'display', 'none');
 
   let totalMutasi = (D.in_tw || 0) + (D.out_tw || 0);
   let pctIn = totalMutasi ? (((D.in_tw || 0) / totalMutasi) * 100).toFixed(1) : 0;
@@ -1927,6 +2097,65 @@ function renderAll() {
   setTxt('kv-utle-pct', D.pct_utle_tw ? D.pct_utle_tw + (D.pct_utle_tw.toString().includes('%') ? '' : '%') : '0%');
   setTxt('kv-asr-nama', D.asr_nama || '-'); setTxt('kv-asr-jenis', D.asr_jenis || '-'); setTxt('kv-asr-polis', D.asr_polis || '-');
   setTxt('kv-asr-cis', fmt(D.asr_cis)); setTxt('kv-asr-cicb', fmt(D.asr_cicb)); setTxt('kv-asr-cit', fmt(D.asr_cit));
+  
+  let isNas = currentKpw === 'NASIONAL';
+  setTxt('lbl-limit-cis', isNas ? 'TOTAL LIMIT CIS' : 'LIMIT CIS');
+  setTxt('lbl-limit-cicb', isNas ? 'TOTAL LIMIT CICB' : 'LIMIT CICB');
+  setTxt('lbl-limit-cit', isNas ? 'TOTAL LIMIT CIT' : 'LIMIT CIT');
+  
+  setTxt('kv-pjpur-nama', isNas ? 'Terdata' : (D.pjpur_nama || '-'));
+  setTxt('kv-pjpur-izin', isNas ? 'Terdata' : (D.pjpur_ada || '-'));
+  setTxt('kv-asr-waktu', isNas ? 'Terdata' : (D.asr_waktu || '-'));
+  setTxt('kv-asr-obyek', isNas ? 'Terdata' : (D.asr_obyek || '-'));
+
+  // Calculate Efisiensi Biaya
+  let tIn = (D.in_tw || 0);
+  let bops_cost = isAll ? (D.q_bops||[]).reduce((a,b)=>a+b,0) : ((D.bops_b1||0) + (D.bops_b2||0) + (D.bops_b3||0));
+  let utle_cost = isAll ? (D.q_utle||[]).reduce((a,b)=>a+b,0) : ((D.b_utle_b1||0) + (D.b_utle_b2||0) + (D.b_utle_b3||0));
+  let asr_cost = isAll ? (D.q_asuransi||[]).reduce((a,b)=>a+b,0) : ((D.b_asuransi_b1||0) + (D.b_asuransi_b2||0) + (D.b_asuransi_b3||0));
+  let pel_cost = isAll ? (D.q_pelihara||[]).reduce((a,b)=>a+b,0) : (D.b_pelihara||0);
+  let diri_cost = isAll ? (D.q_diri||[]).reduce((a,b)=>a+b,0) : (D.b_diri||0);
+  
+  let cBiaya = bops_cost + utle_cost + asr_cost + pel_cost + diri_cost;
+  
+  setTxt('kv-eff-totbiaya', fmt(cBiaya));
+  setTxt('kv-eff-jenis-bops', fmt(bops_cost));
+  setTxt('kv-eff-jenis-asr', fmt(asr_cost));
+  setTxt('kv-eff-jenis-utle', fmt(utle_cost));
+  setTxt('kv-eff-jenis-pelihara', fmt(pel_cost));
+  setTxt('kv-eff-jenis-diri', fmt(diri_cost));
+
+  const abv = v => { if (!v) return '0'; if (v>=1e9) return (v/1e9).toFixed(1).replace('.0','')+'M'; if (v>=1e6) return (v/1e6).toFixed(1).replace('.0','')+'Jt'; if (v>=1e3) return (v/1e3).toFixed(0)+'Rb'; return v; };
+
+  if (isAll) {
+      setTxt('lbl-eff-1', 'Triwulan 1:'); setTxt('lbl-eff-2', 'Triwulan 2:'); setTxt('lbl-eff-3', 'Triwulan 3:');
+      setStyle('wrap-eff-4', 'display', 'flex'); setStyle('wrap-eff-3', 'borderBottom', '1px solid var(--green-val)');
+      setTxt('kv-eff-b1', fmt((D.q_bops[0]||0) + (D.q_utle[0]||0) + (D.q_asuransi[0]||0) + (D.q_pelihara[0]||0) + (D.q_diri[0]||0)));
+      setTxt('kv-eff-det-1', `(${abv(D.q_bops[0]||0)} + ${abv(D.q_asuransi[0]||0)} + ${abv(D.q_utle[0]||0)} + ${abv(D.q_pelihara[0]||0)} + ${abv(D.q_diri[0]||0)})`);
+      setTxt('kv-eff-b2', fmt((D.q_bops[1]||0) + (D.q_utle[1]||0) + (D.q_asuransi[1]||0) + (D.q_pelihara[1]||0) + (D.q_diri[1]||0)));
+      setTxt('kv-eff-det-2', `(${abv(D.q_bops[1]||0)} + ${abv(D.q_asuransi[1]||0)} + ${abv(D.q_utle[1]||0)} + ${abv(D.q_pelihara[1]||0)} + ${abv(D.q_diri[1]||0)})`);
+      setTxt('kv-eff-b3', fmt((D.q_bops[2]||0) + (D.q_utle[2]||0) + (D.q_asuransi[2]||0) + (D.q_pelihara[2]||0) + (D.q_diri[2]||0)));
+      setTxt('kv-eff-det-3', `(${abv(D.q_bops[2]||0)} + ${abv(D.q_asuransi[2]||0)} + ${abv(D.q_utle[2]||0)} + ${abv(D.q_pelihara[2]||0)} + ${abv(D.q_diri[2]||0)})`);
+      setTxt('kv-eff-b4', fmt((D.q_bops[3]||0) + (D.q_utle[3]||0) + (D.q_asuransi[3]||0) + (D.q_pelihara[3]||0) + (D.q_diri[3]||0)));
+      setTxt('kv-eff-det-4', `(${abv(D.q_bops[3]||0)} + ${abv(D.q_asuransi[3]||0)} + ${abv(D.q_utle[3]||0)} + ${abv(D.q_pelihara[3]||0)} + ${abv(D.q_diri[3]||0)})`);
+  } else {
+      setTxt('lbl-eff-1', lB1+':'); setTxt('lbl-eff-2', lB2+':'); setTxt('lbl-eff-3', lB3+':');
+      setStyle('wrap-eff-4', 'display', 'none'); setStyle('wrap-eff-3', 'borderBottom', 'none');
+      
+      let b1_bops = D.bops_b1||0, b1_utle = D.b_utle_b1||0, b1_asr = D.b_asuransi_b1||0;
+      let b2_bops = D.bops_b2||0, b2_utle = D.b_utle_b2||0, b2_asr = D.b_asuransi_b2||0;
+      let b3_bops = D.bops_b3||0, b3_utle = D.b_utle_b3||0, b3_asr = D.b_asuransi_b3||0, b3_pel = D.b_pelihara||0, b3_diri = D.b_diri||0;
+      
+      setTxt('kv-eff-b1', fmt(b1_bops + b1_utle + b1_asr));
+      setTxt('kv-eff-det-1', `(${abv(b1_bops)} + ${abv(b1_asr)} + ${abv(b1_utle)} + 0 + 0)`);
+      setTxt('kv-eff-b2', fmt(b2_bops + b2_utle + b2_asr));
+      setTxt('kv-eff-det-2', `(${abv(b2_bops)} + ${abv(b2_asr)} + ${abv(b2_utle)} + 0 + 0)`);
+      setTxt('kv-eff-b3', fmt(b3_bops + b3_utle + b3_asr + b3_pel + b3_diri));
+      setTxt('kv-eff-det-3', `(${abv(b3_bops)} + ${abv(b3_asr)} + ${abv(b3_utle)} + ${abv(b3_pel)} + ${abv(b3_diri)})`);
+      setTxt('kv-eff-det-4', '');
+  }
+
+
 
   // CHART 1: ARUS KAS
   if(chartArusKas) chartArusKas.destroy();
