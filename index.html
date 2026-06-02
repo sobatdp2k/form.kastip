@@ -120,10 +120,10 @@
   #printableArea { background: var(--bg-body); padding-top: 10px; }
 
   .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; margin-bottom: 32px; }
-  .kpi-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-card); position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: flex-start; gap: 16px; height: 100%; }
+  .kpi-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-card); position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: flex-start; gap: 16px; height: 100%; overflow: hidden; }
   .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-color: var(--blue-primary); }
   .kpi-label { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; }
-  .kpi-value { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; white-space: nowrap; }
+  .kpi-value { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; overflow-wrap: break-word; word-break: break-word; }
 
   .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; margin-bottom: 32px; }
   @media (min-width: 1024px) { 
@@ -225,7 +225,8 @@ div[style*="text-align: center; margin-top: 20px;"] {
           <strong id="head-global-kastip" style="font-size: 13px; color: var(--blue-primary); font-weight: 800;">-</strong>
         </div>
       </div>
-      <button class="btn btn-primary" style="padding: 14px 24px; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.3);" onclick="scrollToEdit()">✏️ Input Manual</button>
+      <button class="btn btn-outline" style="padding: 14px 24px; font-size: 14px;" onclick="openRegionSettings()">⚙️ Atur Wilayah</button>
+      <button class="btn btn-primary" style="padding: 14px 24px; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.3);" onclick="scrollToEdit()">📝 Input Manual</button>
     </div>
   </header>
 
@@ -551,18 +552,18 @@ div[style*="text-align: center; margin-top: 20px;"] {
                 <strong id="kv-asr-obyek" style="font-size: 12px; color: var(--text-main); line-height: 1.3; display: block; margin-top: 2px;">-</strong>
             </div>
         </div>
-        <div style="display: flex; gap: 8px; flex: 1;">
-            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; gap: 8px; flex: 1; min-width: 0;">
+            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; overflow: hidden;">
                 <div style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px;">LIMIT CIS</div>
-                <strong id="kv-asr-cis" style="font-size: 11px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+                <strong id="kv-asr-cis" style="font-size: 11px; color: var(--gold-val); overflow-wrap: break-word; word-break: break-word;">Rp 0</strong>
             </div>
-            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; overflow: hidden;">
                 <div style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px;">LIMIT CICB</div>
-                <strong id="kv-asr-cicb" style="font-size: 11px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+                <strong id="kv-asr-cicb" style="font-size: 11px; color: var(--gold-val); overflow-wrap: break-word; word-break: break-word;">Rp 0</strong>
             </div>
-            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="flex: 1; padding: 8px 4px; background: var(--gold-bg); border-radius: 6px; border: 1px solid var(--gold-val); text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; overflow: hidden;">
                 <div style="font-size: 9px; color: var(--gold-val); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px;">LIMIT CIT</div>
-                <strong id="kv-asr-cit" style="font-size: 11px; color: var(--gold-val); white-space: nowrap;">Rp 0</strong>
+                <strong id="kv-asr-cit" style="font-size: 11px; color: var(--gold-val); overflow-wrap: break-word; word-break: break-word;">Rp 0</strong>
             </div>
         </div>
       </div>
@@ -989,18 +990,18 @@ function computeData(D) {
 // ============================================================
 // 3. ENGINE AGREGASI TAHUNAN & NASIONAL
 // ============================================================
-function getNationalData(tahun, triwulan) {
+function getNationalData(tahun, triwulan, groupFilter = null) {
     let res = { 
-        kpw: 'NASIONAL', kt: 'REKAP SELURUH INDONESIA', pengelola: 'Multi-Bank',
+        kpw: groupFilter ? groupFilter : 'NASIONAL', kt: groupFilter ? 'Agregat Wilayah' : 'REKAP SELURUH INDONESIA', pengelola: 'Multi-Bank',
         q_in: [0,0,0,0], q_out: [0,0,0,0], q_saldo: [0,0,0,0], q_plafon: [0,0,0,0],
         q_bops: [0,0,0,0], q_utle: [0,0,0,0], q_asuransi: [0,0,0,0], q_pelihara: [0,0,0,0], q_diri: [0,0,0,0],
         q_utle_setoran: [0,0,0,0], q_pct_utle: [0,0,0,0]
     };
     DATA_SCHEMA.forEach(f => { if(f.type === 'number' || f.type === 'currency') res[f.id] = 0; else res[f.id] = '-'; });
 
-    res.kpw = 'Nasional';
-    res.kt = 'Seluruh Kastip';
-    res.pengelola = 'KPwDN Nasional';
+    res.kpw = groupFilter ? groupFilter : 'Nasional';
+    res.kt = groupFilter ? 'Agregat Wilayah' : 'Seluruh Kastip';
+    res.pengelola = groupFilter ? ('Akumulasi ' + groupFilter) : 'KPwDN Nasional';
     res.no_pks = 'Terdata';
     res.tgl_pks = 'Terdata';
     
@@ -1018,6 +1019,12 @@ function getNationalData(tahun, triwulan) {
     qList.forEach((q, idx) => {
         if(DATA_STORE[tahun] && DATA_STORE[tahun][q]) {
             Object.values(DATA_STORE[tahun][q]).forEach(d => {
+                if (groupFilter) {
+                    let ktUpper = (d.kt || '').toUpperCase();
+                    let groupArr = REGION_GROUPS[groupFilter] || [];
+                    let found = groupArr.some(g => ktUpper.includes(g.toUpperCase()) || g.toUpperCase().includes(ktUpper));
+                    if (!found) return; // Skip if not in the group
+                }
                 totalCabang++;
                 if (d.peserta && d.peserta !== '-') {
                     totalActiveBanks += d.peserta.split(',').filter(x => x.trim() !== '').length;
@@ -1130,7 +1137,7 @@ function getYearlyData(tahun, kpw, kt) {
 }
 
 function getPrevData(tahun, triwulan, kt) {
-    if(currentKpw === 'NASIONAL') return null; 
+    if(currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) return null; 
     let pTahun = parseInt(tahun); let pTriwulan = triwulan;
     if (triwulan === 'ALL') pTahun -= 1;
     else {
@@ -1163,6 +1170,25 @@ function renderGrowthBadge(curr, prev, elementId, inverse = false) {
 // ============================================================
 // 4. INIT & STATE MANAGEMENT
 // ============================================================
+let defaultRegionGroups = {
+  "WILAYAH A": ["Takengon","Langsa","Rantauprapat","Blangpidie","Meulaboh","Lubuk Linggau","Manna","Muko-Muko","Muara Bungo","Kuala Tungkal","Sumenep","Tanjungpandan","Tanjungpinang","Tanjung Balai Karimun","Natuna","Liwa","Rengat","Pasir Pengaraian","Sungai Penuh","Baturaja","Musi Banyuasin","Kabanjahe","Subulussalam","Gunung Sitoli","Balige","Padangsidimpuan"],
+  "WILAYAH B": ["Tana Paser","Sintang","Ketapang","Singkawang","Putussibau","Batulicin","Tanjung","Sampit","Muara Teweh","Pangkalan Bun","Buntok","Nanga Bulik","Sangatta","Tanjung Redeb","Sendawar","Tanjung Selor","Malinau","Nunukan","Bima","Sumbawa","Maumere","Waingapu","Atambua","Ruteng","Ende","Lewoleba","Waikabubak","Labuan Bajo","Alor"],
+  "WILAYAH C": ["Pohuwato","Fakfak","Namlea","Saumlaki","Tual","Labuha","Tobelo","Sorong","Timika","Biak","Merauke","Wamena","Serui","Nabire","Bintuni","Sorong Selatan","Polewali Mandar","Palopo","Parepare","Bulukumba","Bone","Malili","Tolitoli","Luwuk","Poso","Pasangkayu","Bungku","Baubau","Kolaka","Tahuna","Melonguane","Siau"]
+};
+
+let REGION_GROUPS = {};
+try {
+    let savedGroups = localStorage.getItem('Kastip_RegionGroups');
+    if (savedGroups) {
+        REGION_GROUPS = JSON.parse(savedGroups);
+    } else {
+        REGION_GROUPS = defaultRegionGroups;
+        localStorage.setItem('Kastip_RegionGroups', JSON.stringify(REGION_GROUPS));
+    }
+} catch(e) {
+    REGION_GROUPS = defaultRegionGroups;
+}
+
 let DATA_STORE = {}; 
 let currentTahun = '2025', currentTriwulan = 'Q1', currentKpw = "", currentKt = "";
 let chartArusKas = null, chartBiaya = null, chartSaldo = null; 
@@ -1200,10 +1226,19 @@ function initSelectors() {
       kpwSel.options.add(new Option('--Data Kosong--', '')); 
       currentKpw = ''; 
   } else { 
-      kpwSel.options.add(new Option('Nasional', 'NASIONAL'));
-      kpws.forEach((k, idx) => kpwSel.options.add(new Option(`${idx + 1}. ${k}`, k))); 
+      kpwSel.innerHTML = `<option value="NASIONAL">Total Agregat Nasional</option>
+          <optgroup label="Agregat Wilayah">
+              <option value="WILAYAH A">Akumulasi Wilayah A</option>
+              <option value="WILAYAH B">Akumulasi Wilayah B</option>
+              <option value="WILAYAH C">Akumulasi Wilayah C</option>
+          </optgroup>
+          <optgroup label="Berdasarkan KPwDN" id="optG_kpw"></optgroup>
+      `;
+      let optG = document.getElementById('optG_kpw');
+      kpws.forEach((k, idx) => optG.appendChild(new Option(`${idx + 1}. ${k}`, k))); 
       
-      if(!kpws.includes(currentKpw) && currentKpw !== 'NASIONAL') {
+      let validVals = ['NASIONAL', 'WILAYAH A', 'WILAYAH B', 'WILAYAH C', ...kpws];
+      if(!validVals.includes(currentKpw)) {
           currentKpw = 'NASIONAL';
       }
       kpwSel.value = currentKpw; 
@@ -1224,11 +1259,34 @@ function updateKtSelector() {
       return;
   }
   
-  let kts = new Set();
   let baseDataObj = (currentTriwulan === 'ALL') 
     ? Object.assign({}, DATA_STORE[currentTahun]?.Q1, DATA_STORE[currentTahun]?.Q2, DATA_STORE[currentTahun]?.Q3, DATA_STORE[currentTahun]?.Q4) 
     : (DATA_STORE[currentTahun]?.[currentTriwulan] || {});
     
+  if (currentKpw.startsWith('WILAYAH')) {
+      ktSel.options.add(new Option('-- Akumulasi Total --', 'ALL_KASTIP'));
+      
+      let groupList = REGION_GROUPS[currentKpw] || [];
+      let availableKts = Object.keys(baseDataObj).map(key => ({ slotId: key, data: baseDataObj[key] }));
+      let matchedKts = [];
+      availableKts.forEach(item => {
+          let ktUpper = (item.data.kt || '').toUpperCase();
+          let found = groupList.some(g => ktUpper.includes(g.toUpperCase()) || g.toUpperCase().includes(ktUpper));
+          if (found) matchedKts.push(item);
+      });
+      matchedKts.sort((a, b) => (a.data.kt || '').localeCompare(b.data.kt || ''));
+      
+      matchedKts.forEach((item, idx) => {
+          ktSel.options.add(new Option(`${idx + 1}. ${item.data.kt} (${item.data.kpw})`, item.slotId));
+      });
+      
+      let validKeys = ['ALL_KASTIP', ...matchedKts.map(i => i.slotId)];
+      if(!validKeys.includes(currentKt)) currentKt = 'ALL_KASTIP';
+      ktSel.value = currentKt;
+      return;
+  }
+  
+  let kts = new Set();
   Object.values(baseDataObj).filter(d => d.kpw === currentKpw).forEach(d => kts.add(d.kt));
   
   kts = [...kts].sort();
@@ -1332,7 +1390,7 @@ function initGeoMap(D) {
     let bankPeserta = [];
     try { let savedBank = localStorage.getItem('DashboardKastip_BankPeserta'); if(savedBank) bankPeserta = JSON.parse(savedBank); } catch(e) {}
 
-    if(currentKpw === 'NASIONAL') {
+    if(currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) {
         geoMap.setView([-2.5489, 118.0149], 5, {animate: true});
         return; 
     }
@@ -1369,7 +1427,7 @@ function toggleMapAll() {
             btn.style.borderColor = "var(--border-light)";
         }
         
-        let D = currentKpw === 'NASIONAL' ? getNationalData(currentTahun, currentTriwulan) : 
+        let D = (currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) ? getNationalData(currentTahun, currentTriwulan, currentKpw === 'NASIONAL' ? null : currentKpw) : 
                 (currentTriwulan === 'ALL' ? (currentKt ? getYearlyData(currentTahun, currentKt.split('_')[0], currentKt.split('_')[1]) : null) : 
                 (DATA_STORE[currentTahun]?.[currentTriwulan]?.[currentKt]));
         initGeoMap(D || {});
@@ -1404,6 +1462,14 @@ function toggleMapAll() {
         if (DATA_STORE[currentTahun] && DATA_STORE[currentTahun][currentTriwulan]) {
             listToMap = Object.values(DATA_STORE[currentTahun][currentTriwulan]);
         }
+    }
+    
+    if (currentKpw.startsWith('WILAYAH')) {
+        let groupList = REGION_GROUPS[currentKpw] || [];
+        listToMap = listToMap.filter(d => {
+            let ktUpper = (d.kt || '').toUpperCase();
+            return groupList.some(g => ktUpper.includes(g.toUpperCase()) || g.toUpperCase().includes(ktUpper));
+        });
     }
     
     listToMap.forEach(D => {
@@ -1835,11 +1901,17 @@ function exportToPNG() {
     const mapCard = document.querySelector('.map-card'); if(mapCard) mapCard.style.display = 'none';
     const footerBlock = el('footerBlock'); if (footerBlock) footerBlock.style.display = 'none';
 
-    let D = currentKpw === 'NASIONAL' ? getNationalData(currentTahun, currentTriwulan) : 
+    let D = (currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) ? getNationalData(currentTahun, currentTriwulan, currentKpw === 'NASIONAL' ? null : currentKpw) : 
             (currentTriwulan === 'ALL' ? (currentKt ? getYearlyData(currentTahun, currentKt.split('_')[0], currentKt.split('_')[1]) : null) : 
             (DATA_STORE[currentTahun]?.[currentTriwulan]?.[currentKt]));
 
-    el('kopSuratLoc').textContent = (D && D.kpw) ? (D.kpw === 'NASIONAL' ? 'REKAPITULASI NASIONAL' : `KAS TITIPAN ${D.kpw} - ${D.kt}`) : 'REKAPITULASI KESELURUHAN';
+    let kopSuratVal = 'REKAPITULASI KESELURUHAN';
+    if (D && D.kpw) {
+        if (D.kpw === 'NASIONAL') kopSuratVal = 'REKAPITULASI NASIONAL';
+        else if (D.kpw.startsWith('WILAYAH')) kopSuratVal = `REKAPITULASI ${D.kpw}`;
+        else kopSuratVal = `KAS TITIPAN ${D.kpw} - ${D.kt}`;
+    }
+    el('kopSuratLoc').textContent = kopSuratVal;
     el('kopSuratPer').textContent = `PERIODE: ${currentTriwulan === 'ALL' ? `TAHUN PENUH ${currentTahun}` : `TRIWULAN ${currentTriwulan.replace('Q','')} TAHUN ${currentTahun}`}`;
     el('kopSuratTgl').textContent = `Dicetak pada: ${new Date().toLocaleString('id-ID')}`;
 
@@ -1861,11 +1933,17 @@ function exportToPNG() {
 }
 
 function preparePrint() {
-    let D = currentKpw === 'NASIONAL' ? getNationalData(currentTahun, currentTriwulan) : 
+    let D = (currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) ? getNationalData(currentTahun, currentTriwulan, currentKpw === 'NASIONAL' ? null : currentKpw) : 
             (currentTriwulan === 'ALL' ? (currentKt ? getYearlyData(currentTahun, currentKt.split('_')[0], currentKt.split('_')[1]) : null) : 
             (DATA_STORE[currentTahun]?.[currentTriwulan]?.[currentKt]));
 
-    el('kopSuratLoc').textContent = (D && D.kpw) ? (D.kpw === 'NASIONAL' ? 'REKAPITULASI NASIONAL' : `KAS TITIPAN ${D.kpw} - ${D.kt}`) : 'REKAPITULASI KESELURUHAN';
+    let kopSuratVal = 'REKAPITULASI KESELURUHAN';
+    if (D && D.kpw) {
+        if (D.kpw === 'NASIONAL') kopSuratVal = 'REKAPITULASI NASIONAL';
+        else if (D.kpw.startsWith('WILAYAH')) kopSuratVal = `REKAPITULASI ${D.kpw}`;
+        else kopSuratVal = `KAS TITIPAN ${D.kpw} - ${D.kt}`;
+    }
+    el('kopSuratLoc').textContent = kopSuratVal;
     el('kopSuratPer').textContent = `PERIODE: ${currentTriwulan === 'ALL' ? `TAHUN PENUH ${currentTahun}` : `TRIWULAN ${currentTriwulan.replace('Q','')} TAHUN ${currentTahun}`}`;
     el('kopSuratTgl').textContent = `Dicetak pada: ${new Date().toLocaleString('id-ID')}`;
     window.print();
@@ -1895,8 +1973,8 @@ function renderAll() {
   }
   setTxt('head-global-saldo', fmt(totalGlobalSaldo)); setTxt('head-global-kastip', countKastip + " Kastip Aktif");
 
-  if (currentKpw === 'NASIONAL') {
-      D = getNationalData(currentTahun, currentTriwulan);
+  if (currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) {
+      D = getNationalData(currentTahun, currentTriwulan, currentKpw === 'NASIONAL' ? null : currentKpw);
   } else {
       if (isAll) { if(currentKt) { let parts = currentKt.split('_'); if(parts.length >= 2) D = getYearlyData(currentTahun, parts[0], parts[1]); } } 
       else { const currentData = (DATA_STORE[currentTahun] && DATA_STORE[currentTahun][currentTriwulan]) ? DATA_STORE[currentTahun][currentTriwulan] : {}; D = currentData[currentKt]; }
@@ -1971,17 +2049,18 @@ function renderAll() {
   }
 
   const numFormat = v => { if (!v || v===0) return ''; if (v>=1e9) return (v/1e9).toFixed(1)+' M'; if (v>=1e6) return (v/1e6).toFixed(0)+' Jt'; return v.toLocaleString('id-ID'); };
+  let isNas = currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP');
 
   setTxt('kv-kpw', D.kpw || '-'); setTxt('kv-kt', D.kt || '-'); setTxt('kv-pengelola-main', D.pengelola || '-');
-  setTxt('kv-no-pks', D.no_pks || '-'); setTxt('kv-tgl-pks', D.tgl_pks || '-'); setTxt('kv-peserta', D.peserta || '-');
-  let cBanks = D.peserta && D.peserta !== '-' ? D.peserta.split(',').length : 0;
+  setTxt('kv-no-pks', D.no_pks || (isNas ? 'Terdata' : '-')); setTxt('kv-tgl-pks', D.tgl_pks || (isNas ? 'Terdata' : '-')); setTxt('kv-peserta', D.peserta || (isNas ? 'Terdata' : '-'));
+  let cBanks = D.peserta && D.peserta !== '-' && D.peserta !== 'Terdata' ? D.peserta.split(',').length : 0;
   setTxt('kv-jml-bank', D.jml_perbankan || cBanks || '0'); setTxt('kv-pct-peserta', D.pct_kepesertaan ? D.pct_kepesertaan + (D.pct_kepesertaan.toString().includes('%') ? '' : '%') : '-');
-  setTxt('kv-setor-nama', D.setor_nama || '-'); setTxt('kv-setor-nom', fmt(D.setor_nom));
-  setTxt('kv-tarik-nama', D.tarik_nama || '-'); setTxt('kv-tarik-nom', fmt(D.tarik_nom));
+  setTxt('kv-setor-nama', D.setor_nama || (isNas ? 'Terdata' : '-')); setTxt('kv-setor-nom', fmt(D.setor_nom));
+  setTxt('kv-tarik-nama', D.tarik_nama || (isNas ? 'Terdata' : '-')); setTxt('kv-tarik-nom', fmt(D.tarik_nom));
   setTxt('kv-tot-terbesar', fmt((D.setor_nom || 0) + (D.tarik_nom || 0)));
-  setTxt('kv-temuan', D.lap_temuan || '0'); setTxt('kv-telat', D.lap_telat || '-');
+  setTxt('kv-temuan', D.lap_temuan || '0'); setTxt('kv-telat', D.lap_telat || (isNas ? 'Terdata' : '-'));
   
-  setTxt('kv-lyn-status', D.lyn_penukaran || '-'); setTxt('kv-lyn-jadwal', D.lyn_jadwal || '-'); setTxt('kv-lyn-realisasi', D.lyn_realisasi || '0'); setTxt('kv-lyn-penukar', D.lyn_penukar || '0');
+  setTxt('kv-lyn-status', isNas ? 'Terdata' : (D.lyn_penukaran || '-')); setTxt('kv-lyn-jadwal', isNas ? 'Terdata' : (D.lyn_jadwal || '-')); setTxt('kv-lyn-realisasi', D.lyn_realisasi || '0'); setTxt('kv-lyn-penukar', D.lyn_penukar || '0');
   let realisasi = parseFloat(D.lyn_realisasi) || 0;
   let penukar = parseFloat(D.lyn_penukar) || 0;
   setTxt('kv-lyn-rata', realisasi > 0 ? (penukar / realisasi).toFixed(1) : '0');
@@ -2095,10 +2174,10 @@ function renderAll() {
 
   setTxt('kv-utle-jml', fmt(D.utle_tw));
   setTxt('kv-utle-pct', D.pct_utle_tw ? D.pct_utle_tw + (D.pct_utle_tw.toString().includes('%') ? '' : '%') : '0%');
-  setTxt('kv-asr-nama', D.asr_nama || '-'); setTxt('kv-asr-jenis', D.asr_jenis || '-'); setTxt('kv-asr-polis', D.asr_polis || '-');
+  setTxt('kv-asr-nama', D.asr_nama || (isNas ? 'Terdata' : '-')); setTxt('kv-asr-jenis', D.asr_jenis || (isNas ? 'Terdata' : '-')); setTxt('kv-asr-polis', D.asr_polis || (isNas ? 'Terdata' : '-'));
   setTxt('kv-asr-cis', fmt(D.asr_cis)); setTxt('kv-asr-cicb', fmt(D.asr_cicb)); setTxt('kv-asr-cit', fmt(D.asr_cit));
   
-  let isNas = currentKpw === 'NASIONAL';
+  
   setTxt('lbl-limit-cis', isNas ? 'TOTAL LIMIT CIS' : 'LIMIT CIS');
   setTxt('lbl-limit-cicb', isNas ? 'TOTAL LIMIT CICB' : 'LIMIT CICB');
   setTxt('lbl-limit-cit', isNas ? 'TOTAL LIMIT CIT' : 'LIMIT CIT');
@@ -2292,7 +2371,7 @@ let searchTimeout;
 el('tableSearch').addEventListener('input', () => { 
     clearTimeout(searchTimeout); 
     searchTimeout = setTimeout(() => {
-        let D = currentKpw === 'NASIONAL' ? getNationalData(currentTahun, currentTriwulan) : 
+        let D = (currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) ? getNationalData(currentTahun, currentTriwulan, currentKpw === 'NASIONAL' ? null : currentKpw) : 
                 (currentTriwulan === 'ALL' ? (currentKt ? getYearlyData(currentTahun, currentKt.split('_')[0], currentKt.split('_')[1]) : null) : 
                 (DATA_STORE[currentTahun]?.[currentTriwulan]?.[currentKt]));
         renderTable(D || {});
@@ -2300,7 +2379,7 @@ el('tableSearch').addEventListener('input', () => {
 });
 
 function renderEditPanel() {
-  if (currentTriwulan === 'ALL' || currentKpw === 'NASIONAL') {
+  if (currentTriwulan === 'ALL' || currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) {
       el('editFormContainer').innerHTML = '<div style="padding: 20px; background: #fff3cd; color: #856404; border-radius: 8px;">⚠️ Form input dikunci pada mode <strong>1 Tahun Penuh</strong> atau <strong>Skala Nasional</strong> untuk menjaga keamanan kalkulasi agregat. Silahkan lakukan perubahan data pada Q1-Q4. </div>';
       el('btnSaveEdit').style.display = 'none'; el('formHelperText').style.display = 'none'; return;
   }
@@ -2382,7 +2461,7 @@ function toggleAcc(header) {
 }
 
 function applyEdit() {
-  if(currentTriwulan === 'ALL' || currentKpw === 'NASIONAL') return;
+  if(currentTriwulan === 'ALL' || currentKpw === 'NASIONAL' || (currentKpw.startsWith('WILAYAH') && currentKt === 'ALL_KASTIP')) return;
   const inputKpw = el('edit_kpw').value.trim(); const inputKtName = el('edit_kt').value.trim(); 
   if (!inputKpw || !inputKtName) return showToast("❌ KPwDN dan Kas Titipan wajib diisi!");
   
@@ -2549,6 +2628,54 @@ function deleteCustomParameter(idParam) {
         renderAll();
     }
 }
+
+function openRegionSettings() {
+    el('txtRegA').value = (REGION_GROUPS["WILAYAH A"] || []).join('\n');
+    el('txtRegB').value = (REGION_GROUPS["WILAYAH B"] || []).join('\n');
+    el('txtRegC').value = (REGION_GROUPS["WILAYAH C"] || []).join('\n');
+    el('regionModalOverlay').style.display = 'block';
+    el('regionModal').style.display = 'block';
+}
+function closeRegionSettings() {
+    el('regionModalOverlay').style.display = 'none';
+    el('regionModal').style.display = 'none';
+}
+function saveRegionSettings() {
+    let parseList = str => str.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    REGION_GROUPS["WILAYAH A"] = parseList(el('txtRegA').value);
+    REGION_GROUPS["WILAYAH B"] = parseList(el('txtRegB').value);
+    REGION_GROUPS["WILAYAH C"] = parseList(el('txtRegC').value);
+    
+    localStorage.setItem('Kastip_RegionGroups', JSON.stringify(REGION_GROUPS));
+    closeRegionSettings();
+    showToast("✅ Pembagian Wilayah berhasil disimpan!");
+    
+    if (currentKpw.startsWith('WILAYAH')) renderAll();
+}
 </script>
+
+<div id="regionModalOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9998; backdrop-filter:blur(2px);"></div>
+<div id="regionModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; max-width:800px; background:var(--bg-card); padding:24px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:9999; border:1px solid var(--border-light);">
+    <h2 style="margin-top:0; color:var(--text-main); font-size:18px;">⚙️ Pengaturan Pembagian Wilayah</h2>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Masukkan nama Kas Titipan untuk setiap wilayah (satu nama per baris). Nama akan divalidasi dan digunakan untuk mengakumulasikan data yang sesuai dari Laporan.</p>
+    <div style="display:flex; gap:16px;">
+        <div style="flex:1;">
+            <h4 style="margin:0 0 8px 0; color:var(--blue-primary);">Wilayah A</h4>
+            <textarea id="txtRegA" rows="15" style="width:100%; padding:8px; border:1px solid var(--border-mid); border-radius:6px; font-family:monospace; font-size:12px; background:var(--bg-body); color:var(--text-main); resize:none;"></textarea>
+        </div>
+        <div style="flex:1;">
+            <h4 style="margin:0 0 8px 0; color:var(--teal-val);">Wilayah B</h4>
+            <textarea id="txtRegB" rows="15" style="width:100%; padding:8px; border:1px solid var(--border-mid); border-radius:6px; font-family:monospace; font-size:12px; background:var(--bg-body); color:var(--text-main); resize:none;"></textarea>
+        </div>
+        <div style="flex:1;">
+            <h4 style="margin:0 0 8px 0; color:var(--green-val);">Wilayah C</h4>
+            <textarea id="txtRegC" rows="15" style="width:100%; padding:8px; border:1px solid var(--border-mid); border-radius:6px; font-family:monospace; font-size:12px; background:var(--bg-body); color:var(--text-main); resize:none;"></textarea>
+        </div>
+    </div>
+    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+        <button class="btn btn-outline" onclick="closeRegionSettings()">Batal</button>
+        <button class="btn btn-primary" onclick="saveRegionSettings()">Simpan Pembagian</button>
+    </div>
+</div>
 </body>
 </html>
